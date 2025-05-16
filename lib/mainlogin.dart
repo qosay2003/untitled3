@@ -160,7 +160,7 @@ class _LoginScreenState extends State<mainlogin> {
                                 fontSize: 18),
                           ),
                         ),
-                        Text('ليس لديك حساب؟ ',
+                        Text('ليس لديك حساب؟ ال',
                             style: TextStyle(
                                 color: Colors.white,
                                 fontFamily: "IBMPlexSansArabic",
