@@ -15,8 +15,7 @@ class ChatScreenai extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreenai> {
   final TextEditingController _textController = TextEditingController();
   final List<Map<String, String>> _messages = [];
-  final String _apiKey =
-      'AIzaSyDE-TO8Q-KS89FDmM2M3y1z1Bql08tdOBY'; // Replace with your API key
+  final String _apiKey = 'AIzaSyDE-TO8Q-KS89FDmM2M3y1z1Bql08tdOBY';
   bool _isTyping = false;
   final ScrollController _scrollController = ScrollController();
 
@@ -29,7 +28,6 @@ class _ChatScreenState extends State<ChatScreenai> {
       _isTyping = true;
     });
 
-    // Scroll to bottom after adding user message
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _scrollController.animateTo(
         _scrollController.position.maxScrollExtent,
@@ -75,7 +73,6 @@ class _ChatScreenState extends State<ChatScreenai> {
           });
         });
 
-        // Scroll to bottom after adding Gemini response
         WidgetsBinding.instance.addPostFrameCallback((_) {
           _scrollController.animateTo(
             _scrollController.position.maxScrollExtent,
@@ -131,136 +128,169 @@ class _ChatScreenState extends State<ChatScreenai> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xFFAAAAAA),
-        title: Text(
-          'دردشة AI',
-          style: TextStyle(
-            color: Color(0xFF0B5022),
-            fontWeight: FontWeight.bold,
+        actions: [
+          Text(
+            'دردشة مع الذكاء الإصطناعي',
+            style: TextStyle(
+              color: Color(0xFF0B5022),
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+            ),
           ),
-        ),
+          SizedBox(width: 20),
+        ],
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Color(0xFF0B5022)),
           onPressed: () => Navigator.pop(context),
         ),
       ),
-      body: Column(
+      body: Stack(
         children: [
-          Expanded(
-            child: ListView.builder(
-              controller: _scrollController,
-              padding: EdgeInsets.all(8.0),
-              itemCount: _messages.length + (_isTyping ? 1 : 0),
-              itemBuilder: (context, index) {
-                if (_isTyping && index == _messages.length) {
-                  return Align(
-                    alignment: Alignment.centerLeft,
-                    child: Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [
-                          CircularProgressIndicator(
-                            color: Color(0xFF0B5022),
-                          ),
-                          SizedBox(width: 8),
-                          Text(
-                            'Gemini يكتب...',
-                            style: TextStyle(
-                              color: Color(0xFF0B5022),
-                              fontStyle: FontStyle.italic,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                }
-
-                final message = _messages[index];
-                final isUser = message['sender'] == 'user';
-                final isError = message['sender'] == 'error';
-
-                return Align(
-                  alignment:
-                      isUser ? Alignment.centerRight : Alignment.centerLeft,
-                  child: Container(
-                    margin:
-                        EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
-                    padding: EdgeInsets.all(12.0),
-                    decoration: BoxDecoration(
-                      color: isUser
-                          ? Color(0xFF0B5022)
-                          : isError
-                              ? Colors.red.withOpacity(0.2)
-                              : Colors.grey[300],
-                      borderRadius: BorderRadius.circular(12.0),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: isUser
-                          ? CrossAxisAlignment.end
-                          : CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          message['text']!,
-                          style: TextStyle(
-                            color: isUser ? Colors.white : Colors.black,
-                            fontSize: 16,
-                          ),
-                        ),
-                        SizedBox(height: 4),
-                        Text(
-                          message['timestamp']!,
-                          style: TextStyle(
-                            color: isUser ? Colors.white70 : Colors.black54,
-                            fontSize: 12,
-                          ),
-                        ),
-                      ],
-                    ),
+          // صورة الخلفية
+          Positioned.fill(
+            child: Image.asset(
+              width: 400,
+              height: 400,
+              'img/greenlogo.png',
+              fit: BoxFit.contain,
+              errorBuilder: (context, error, stackTrace) => Container(
+                color: Color(0xFFAAAAAA), // الخلفية الاحتياطية
+                child: Center(
+                  child: Text(
+                    'فشل تحميل صورة الخلفية',
+                    style: TextStyle(color: Colors.red, fontSize: 16),
                   ),
-                );
-              },
+                ),
+              ),
             ),
           ),
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
-            color: Color(0xFFAAAAAA),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: _textController,
-                    decoration: InputDecoration(
-                      hintText: 'اكتب رسالتك...',
-                      hintStyle: TextStyle(color: Colors.black54),
-                      filled: true,
-                      fillColor: Colors.white,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12.0),
-                        borderSide: BorderSide.none,
-                      ),
-                      contentPadding: EdgeInsets.symmetric(
-                        horizontal: 16.0,
-                        vertical: 12.0,
-                      ),
-                    ),
-                    onSubmitted: (value) {
-                      if (value.trim().isNotEmpty) {
-                        _sendMessage(value.trim());
-                      }
-                    },
-                  ),
-                ),
-                SizedBox(width: 8.0),
-                IconButton(
-                  icon: Icon(Icons.send, color: Color(0xFF0B5022)),
-                  onPressed: () {
-                    if (_textController.text.trim().isNotEmpty) {
-                      _sendMessage(_textController.text.trim());
+          // طبقة شفافية لتحسين رؤية العناصر
+          Positioned.fill(
+            child: Container(
+              color: Colors.black.withOpacity(0.5), // شفافية سوداء بنسبة 50%
+            ),
+          ),
+          // محتوى الصفحة
+          Column(
+            children: [
+              Expanded(
+                child: ListView.builder(
+                  controller: _scrollController,
+                  padding: EdgeInsets.all(8.0),
+                  itemCount: _messages.length + (_isTyping ? 1 : 0),
+                  itemBuilder: (context, index) {
+                    if (_isTyping && index == _messages.length) {
+                      return Align(
+                        alignment: Alignment.centerLeft,
+                        child: Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Row(
+                            children: [
+                              CircularProgressIndicator(
+                                color: Color(0xFF0B5022),
+                              ),
+                              SizedBox(width: 8),
+                              Text(
+                                'Gemini يكتب...',
+                                style: TextStyle(
+                                  color: Color(0xFF0B5022),
+                                  fontStyle: FontStyle.italic,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
                     }
+
+                    final message = _messages[index];
+                    final isUser = message['sender'] == 'user';
+                    final isError = message['sender'] == 'error';
+
+                    return Align(
+                      alignment:
+                          isUser ? Alignment.centerRight : Alignment.centerLeft,
+                      child: Container(
+                        margin: EdgeInsets.symmetric(
+                            vertical: 4.0, horizontal: 8.0),
+                        padding: EdgeInsets.all(12.0),
+                        decoration: BoxDecoration(
+                          color: isUser
+                              ? Color(0xFF0B5022)
+                              : isError
+                                  ? Colors.red.withOpacity(0.2)
+                                  : Colors.grey[300],
+                          borderRadius: BorderRadius.circular(12.0),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: isUser
+                              ? CrossAxisAlignment.end
+                              : CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              message['text']!,
+                              style: TextStyle(
+                                color: isUser ? Colors.white : Colors.black,
+                                fontSize: 16,
+                              ),
+                            ),
+                            SizedBox(height: 4),
+                            Text(
+                              message['timestamp']!,
+                              style: TextStyle(
+                                color: isUser ? Colors.white70 : Colors.black54,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
                   },
                 ),
-              ],
-            ),
+              ),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+                color: Color(0xFFAAAAAA),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: _textController,
+                        decoration: InputDecoration(
+                          hintText: 'اكتب رسالتك...',
+                          hintStyle: TextStyle(color: Colors.black54),
+                          filled: true,
+                          fillColor: Colors.white,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12.0),
+                            borderSide: BorderSide.none,
+                          ),
+                          contentPadding: EdgeInsets.symmetric(
+                            horizontal: 16.0,
+                            vertical: 12.0,
+                          ),
+                        ),
+                        onSubmitted: (value) {
+                          if (value.trim().isNotEmpty) {
+                            _sendMessage(value.trim());
+                          }
+                        },
+                      ),
+                    ),
+                    SizedBox(width: 8.0),
+                    IconButton(
+                      icon: Icon(Icons.send, color: Color(0xFF0B5022)),
+                      onPressed: () {
+                        if (_textController.text.trim().isNotEmpty) {
+                          _sendMessage(_textController.text.trim());
+                        }
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
         ],
       ),

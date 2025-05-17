@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:untitled3/calculatorscreenAI.dart';
 import 'dart:async';
 import 'package:untitled3/fhipage.dart';
 import 'package:untitled3/homepage.dart';
@@ -23,7 +22,6 @@ class MyApp extends StatelessWidget {
         'thi': (context) => THiPage(),
         'mlogin': (context) => mainlogin(),
         'homepage': (context) => Homepage(),
-        'cal': (context) => CalorieCalculatorScreen(),
       },
     );
   }

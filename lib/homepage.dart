@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:untitled3/Placesscreen.dart';
-import 'package:untitled3/calculatorscreenAI.dart';
+import 'package:untitled3/calcbot.dart';
 import 'package:untitled3/chatuserlist.dart';
 import 'package:untitled3/forgetpass3.dart';
 import 'package:untitled3/healthypage.dart';
@@ -92,7 +92,7 @@ class _HomepageState extends State<Homepage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => ChatScreenai()),
+                              builder: (context) => ChatListScreen()),
                         );
                       },
                       icon: Icon(
@@ -322,13 +322,14 @@ class _HomepageState extends State<Homepage> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => ChatListScreen()),
+                  MaterialPageRoute(builder: (context) => ChatScreenai()),
                 );
               },
               backgroundColor: Color(0xFF0B5022),
-              child: Icon(
-                Icons.chat,
-                color: Colors.white,
+              child: Text(
+                "AI Chat",
+                style:
+                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
               ),
             ),
             if (totalUnreadCount > 0)
@@ -338,21 +339,12 @@ class _HomepageState extends State<Homepage> {
                 child: Container(
                   padding: EdgeInsets.all(4),
                   decoration: BoxDecoration(
-                    color: Color(0xFF0B5022),
+                    color: Colors.white,
                     shape: BoxShape.circle,
                   ),
                   constraints: BoxConstraints(
                     minWidth: 16,
                     minHeight: 16,
-                  ),
-                  child: Text(
-                    totalUnreadCount.toString(),
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 10,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    textAlign: TextAlign.center,
                   ),
                 ),
               ),
