@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:untitled3/TrainersDescriptionScreen.dart';
 
 class PlacesScreen extends StatefulWidget {
   final String mainTitle; // معلمة جديدة للعنوان الرئيسي
@@ -15,32 +16,38 @@ class _PlacesScreenState extends State<PlacesScreen> {
 
   // قائمة الفلاتر مع الصور
   final List<Map<String, String>> filters = [
-    {'name': 'الكل', 'image': 'img/my.jpeg'},
-    {'name': 'سياحة', 'image': 'img/my.jpeg'},
-    {'name': 'ترفيه', 'image': 'img/my.jpeg'},
-    {'name': 'النوادي', 'image': 'img/my.jpeg'},
-    {'name': 'مالية', 'image': 'img/my.jpeg'},
-    {'name': 'مالية', 'image': 'img/my.jpeg'},
-    {'name': 'مالية', 'image': 'img/my.jpeg'},
+    {'name': 'الكل', 'image': 'img/greenlogo.png'},
+    {'name': 'عمان', 'image': 'img/amman.jpg'},
+    {'name': 'زرقاء', 'image': 'img/zarqa.jpg'},
+    {'name': 'بلقاء', 'image': 'img/blqaa.jpg'},
+    {'name': 'مأدبا', 'image': 'img/madaba.jpg'},
+    {'name': 'إربد', 'image': 'img/irbid.jpg'},
+    {'name': 'مفرق', 'image': 'img/mafraq.jpg'},
+    {'name': 'جرش', 'image': 'img/jerash.jpg'},
+    {'name': 'عجلون', 'image': 'img/ajloon.jpg'},
+    {'name': 'معان', 'image': 'img/maan.jpg'},
+    {'name': 'عقبه', 'image': 'img/aqaba.jpg'},
+    {'name': 'كرك', 'image': 'img/karak.jpg'},
+    {'name': 'طفية', 'image': 'img/tafilah.jpg'},
   ];
 
   // قائمة الأماكن (بيانات وهمية) مع إضافة حقل الصورة
   final List<Map<String, String>> places = [
     {
       'name': 'نادي فتنس تايم',
-      'category': 'النوادي',
+      'category': 'عمان',
       'rating': '5',
       'image': 'img/my.jpeg'
     },
     {
       'name': 'الأهرامات',
-      'category': 'سياحة',
+      'category': 'زرقاء',
       'rating': '4',
       'image': 'img/my.jpeg'
     },
     {
       'name': 'الفيروز',
-      'category': 'ترفيه',
+      'category': 'عمان',
       'rating': '5',
       'image': 'img/my.jpeg'
     },
@@ -131,6 +138,10 @@ class _PlacesScreenState extends State<PlacesScreen> {
                 itemBuilder: (context, index) {
                   return Card(
                     child: ListTile(
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => GymProfileScreen()));
+                      },
                       leading: null,
                       title: Row(
                         children: [
@@ -138,7 +149,8 @@ class _PlacesScreenState extends State<PlacesScreen> {
                           Container(
                             width: 50,
                             height: 50,
-                            margin: const EdgeInsets.only(right: 10),
+                            margin: const EdgeInsets.only(
+                                left: 20), // تعديل المسافة إلى 20
                             child: Image.asset(
                               filteredPlaces[index]['image']!,
                               fit: BoxFit.cover,

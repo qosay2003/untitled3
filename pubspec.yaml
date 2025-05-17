@@ -28,6 +28,8 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+ 
+ intl: ^0.19.0
  table_calendar: ^3.0.9
  cupertino_icons: ^1.0.8
  font_awesome_flutter: ^10.7.0
@@ -85,6 +87,18 @@ flutter:
     - img/healthy.png
     - img/mezan.png
     - assets/arabic_meals_dataset.csv
+    - img/amman.jpg
+    - img/jerash.jpg
+    - img/aqaba.jpg
+    - img/irbid.jpg
+    - img/mafraq.jpg
+    - img/zarqa.jpg
+    - img/ajloon.jpg
+    - img/karak.jpg
+    - img/madaba.jpg
+    - img/tafilah.jpg
+    - img/maan.jpg 
+    - img/blqaa.jpg 
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

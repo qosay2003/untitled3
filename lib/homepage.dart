@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:untitled3/Placesscreen.dart';
 import 'package:untitled3/calculatorscreenAI.dart';
+import 'package:untitled3/chatuserlist.dart';
 import 'package:untitled3/forgetpass3.dart';
 import 'package:untitled3/healthypage.dart';
+import 'package:untitled3/userTrainDes.dart';
+import 'package:untitled3/chatAI.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _HomepageState createState() => _HomepageState();
 }
 
@@ -39,6 +43,18 @@ class _HomepageState extends State<Homepage> {
     },
   ];
 
+  // قائمة افتراضية لعدد الرسائل غير المقروءة (بديل مؤقت لقاعدة البيانات)
+  final List<Map<String, dynamic>> users = const [
+    {'unreadCount': '2'},
+    {'unreadCount': '0'},
+    {'unreadCount': '5'},
+  ];
+
+  // حساب إجمالي عدد الرسائل غير المقروءة
+  int get totalUnreadCount {
+    return users.fold(0, (sum, user) => sum + int.parse(user['unreadCount']));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,6 +72,7 @@ class _HomepageState extends State<Homepage> {
                     Scaffold.of(context).openDrawer();
                   },
                   icon: Icon(
+                    size: 20,
                     Icons.menu,
                     color: Color(0xFF0B5022),
                     shadows: [
@@ -68,13 +85,58 @@ class _HomepageState extends State<Homepage> {
                 ),
                 NotificationBell(),
                 SizedBox(width: 4),
+                Stack(
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ChatScreenai()),
+                        );
+                      },
+                      icon: Icon(
+                        Icons.chat,
+                        color: Color(0xFF0B5022),
+                        size: 20,
+                      ),
+                    ),
+                    if (totalUnreadCount > 0)
+                      Positioned(
+                        right: 0,
+                        top: 0,
+                        child: Container(
+                          padding: EdgeInsets.all(4),
+                          decoration: BoxDecoration(
+                            color: Color(0xFF0B5022),
+                            shape: BoxShape.circle,
+                          ),
+                          constraints: BoxConstraints(
+                            minWidth: 16,
+                            minHeight: 16,
+                          ),
+                          child: Text(
+                            totalUnreadCount.toString(),
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
                 SizedBox(width: 4),
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    showSearch(context: context, delegate: appsearch());
+                  },
                   icon: Icon(
                     Icons.search,
                     color: Color(0xFF0B5022),
-                    size: 30,
+                    size: 20,
                     shadows: [
                       Shadow(
                           color: Color.fromARGB(255, 1, 23, 9),
@@ -253,6 +315,48 @@ class _HomepageState extends State<Homepage> {
               ),
             ],
           ),
+        ),
+        floatingActionButton: Stack(
+          children: [
+            FloatingActionButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ChatListScreen()),
+                );
+              },
+              backgroundColor: Color(0xFF0B5022),
+              child: Icon(
+                Icons.chat,
+                color: Colors.white,
+              ),
+            ),
+            if (totalUnreadCount > 0)
+              Positioned(
+                right: 0,
+                top: 0,
+                child: Container(
+                  padding: EdgeInsets.all(4),
+                  decoration: BoxDecoration(
+                    color: Color(0xFF0B5022),
+                    shape: BoxShape.circle,
+                  ),
+                  constraints: BoxConstraints(
+                    minWidth: 16,
+                    minHeight: 16,
+                  ),
+                  child: Text(
+                    totalUnreadCount.toString(),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+          ],
         ),
         body: SafeArea(
             child: Column(
@@ -654,7 +758,17 @@ class _HomepageState extends State<Homepage> {
                   child: Container(
                     child: ElevatedButton(
                       onPressed: () {
-                        print("تم النقر على الزر");
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => GymProfileViewScreen(
+                                  cityController: TextEditingController(),
+                                  areaController: TextEditingController(),
+                                  allweekdayHoursController:
+                                      TextEditingController(),
+                                  priceMonthController: TextEditingController(),
+                                  price3MonthsController:
+                                      TextEditingController(),
+                                  priceYearController: TextEditingController(),
+                                )));
                       },
                       style: ElevatedButton.styleFrom(
                         elevation: 10,
@@ -776,6 +890,7 @@ class _NotificationBellState extends State<NotificationBell> {
   Widget build(BuildContext context) {
     return IconButton(
       icon: Icon(
+        size: 20,
         Icons.notifications,
         color: _isNotificationActive ? Color(0xFF0B5022) : Colors.white,
       ),
@@ -794,6 +909,72 @@ class _NotificationBellState extends State<NotificationBell> {
           ),
         );
       },
+    );
+  }
+}
+
+class appsearch extends SearchDelegate {
+  @override
+  List<Widget> buildActions(BuildContext context) {
+    return [
+      IconButton(
+        icon: Icon(Icons.clear),
+        onPressed: () {
+          query = '';
+        },
+      ),
+    ];
+  }
+
+  @override
+  Widget? buildLeading(BuildContext context) {
+    return IconButton(
+      icon: Icon(Icons.arrow_back),
+      onPressed: () {
+        close(context, null);
+      },
+    );
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    // هنا يمكنك إضافة منطق عرض النتائج بناءً على الاستعلام
+    return ListView(
+      children: [
+        ListTile(
+          title: Text('نتيجة 1: $query'),
+          onTap: () {
+            // تنفيذ الإجراء عند النقر على نتيجة معينة
+          },
+        ),
+        ListTile(
+          title: Text('نتيجة 2: $query'),
+          onTap: () {
+            // تنفيذ الإجراء عند النقر على نتيجة معينة
+          },
+        ),
+      ],
+    );
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    // هنا يمكنك إضافة منطق عرض الاقتراحات بناءً على الاستعلام
+    return ListView(
+      children: [
+        ListTile(
+          title: Text('اقتراح 1: $query'),
+          onTap: () {
+            // تنفيذ الإجراء عند النقر على اقتراح معين
+          },
+        ),
+        ListTile(
+          title: Text('اقتراح 2: $query'),
+          onTap: () {
+            // تنفيذ الإجراء عند النقر على اقتراح معين
+          },
+        ),
+      ],
     );
   }
 }

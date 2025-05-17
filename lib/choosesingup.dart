@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:untitled3/bissingup.dart';
 import 'package:untitled3/usersingup.dart';
+import 'package:untitled3/TrainersSingup.dart';
 
 // صفحات وهمية لكل دور (يمكنك استبدالها بصفحاتك الفعلية)
 class EmployerPage extends StatelessWidget {
@@ -68,7 +69,7 @@ class choosesingup extends StatelessWidget {
     final pages = [
       Bissingup(), //بزنس
       Usersingup(), //مستخدم
-      TrainerPage(), // مدربين
+      trainerssingup(), // مدربين
       StorePage(), //متاجر
     ];
 
