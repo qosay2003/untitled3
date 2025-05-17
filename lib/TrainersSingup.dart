@@ -26,13 +26,15 @@ class trainerssingup extends StatelessWidget {
               ),
               child: AppBar(
                 centerTitle: true,
-                title: Text('sign up',
-                    style: TextStyle(
-                      color: Color(0xFF0B5022),
-                      fontWeight: FontWeight.w900,
-                      fontSize: 40,
-                      fontFamily: "IBMPlexSansArabic",
-                    )),
+                title: Text(
+                  'sign up',
+                  style: TextStyle(
+                    color: Color(0xFF0B5022),
+                    fontWeight: FontWeight.w900,
+                    fontSize: 40,
+                    fontFamily: "IBMPlexSansArabic",
+                  ),
+                ),
                 backgroundColor: Colors.transparent,
                 elevation: 0,
               ),
@@ -60,22 +62,8 @@ class trainerssingup extends StatelessWidget {
                         SizedBox(width: 10),
                         Expanded(
                           child: buildDropdownWithIcons('نوع العمل', [
-                            {
-                              'label': 'كمال الاجسام',
-                              'image': 'img/damble.png',
-                            },
-                            {
-                              'label': 'اكاديمية كره',
-                              'image': 'img/football.png',
-                            },
-                            {
-                              'label': 'مسبح',
-                              'image': 'img/bool.png',
-                            },
-                            {
-                              'label': 'فنون قتاليه',
-                              'image': 'img/kill.png',
-                            },
+                            {'label': 'مدرب رياضي', 'image': 'null'},
+                            {'label': 'اخصائي تغذية', 'image': 'null'},
                           ]),
                         ),
                       ],
@@ -217,17 +205,9 @@ class trainerssingup extends StatelessWidget {
             items: items.map((Map<String, dynamic> item) {
               return DropdownMenuItem<String>(
                 value: item['label'],
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Text(item['label'], textDirection: TextDirection.rtl),
-                    SizedBox(width: 10),
-                    Image.asset(
-                      item['image'],
-                      width: 24,
-                      height: 24,
-                    ),
-                  ],
+                child: Text(
+                  item['label'],
+                  textDirection: TextDirection.rtl,
                 ),
               );
             }).toList(),

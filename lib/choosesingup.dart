@@ -62,7 +62,7 @@ class choosesingup extends StatelessWidget {
       {'title': 'صاحب عمل', 'icon': FontAwesomeIcons.userTie},
       {'title': 'مستخدم', 'icon': FontAwesomeIcons.user},
       {'title': 'اخصائي تغذية/مدرب شخصي', 'icon': FontAwesomeIcons.dumbbell},
-      {'title': 'متجر الكتروني', 'icon': Icons.store},
+      {'title': 'مسؤول', 'icon': Icons.admin_panel_settings},
     ];
 
     // قائمة الصفحات المرتبطة بكل دور
