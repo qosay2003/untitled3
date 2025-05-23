@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:untitled3/mainlogin.dart';
 
@@ -7,6 +8,8 @@ class forgetpass3 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TextEditingController password = TextEditingController();
+    TextEditingController confirm_password = TextEditingController();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xFF0B5022),
@@ -78,6 +81,7 @@ class forgetpass3 extends StatelessWidget {
                 padding:
                     const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                 child: TextField(
+                  controller: password,
                   textAlign: TextAlign.right,
                   decoration: InputDecoration(
                     filled: true,
@@ -117,6 +121,7 @@ class forgetpass3 extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.all(5),
                 child: TextField(
+                  controller: confirm_password,
                   textAlign: TextAlign.right,
                   decoration: InputDecoration(
                     filled: true,
@@ -138,9 +143,23 @@ class forgetpass3 extends StatelessWidget {
                 padding: const EdgeInsets.all(5),
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) =>
-                            mainlogin())); // إضافة وظيفة الزر هنا
+                    if (password.text == confirm_password.text) {
+                      try {
+                        FirebaseAuth.instance.currentUser!
+                            .updatePassword(password.text);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                              content: Text('Password updated successfully')),
+                        );
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => mainlogin()));
+                      } on Exception catch (e) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('خطأ: ${e.toString()}')),
+                        );
+                      }
+                    }
+                    // إضافة وظيفة الزر هنا
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,

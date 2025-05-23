@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:untitled3/choosesingup.dart';
 import 'package:untitled3/forgetpass1.dart';
@@ -11,7 +12,8 @@ class mainlogin extends StatefulWidget {
 
 class _LoginScreenState extends State<mainlogin> {
   bool _obscureText = true;
-
+  TextEditingController email = TextEditingController();
+  TextEditingController password = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -123,8 +125,17 @@ class _LoginScreenState extends State<mainlogin> {
                     SizedBox(height: 100),
                     // زر الدخول
                     ElevatedButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, "homepage");
+                      onPressed: () async {
+                        try {
+                          await FirebaseAuth.instance
+                              .signInWithEmailAndPassword(
+                                  email: email.text, password: password.text);
+                          Navigator.pushNamed(context, "homepage");
+                        } on Exception catch (e) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('خطأ: ${e.toString()}')),
+                          );
+                        }
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,

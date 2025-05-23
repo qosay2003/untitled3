@@ -1,12 +1,18 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:untitled3/fhipage.dart';
+import 'package:untitled3/firebase_options.dart';
 import 'package:untitled3/homepage.dart';
 import 'package:untitled3/mainlogin.dart';
 import 'package:untitled3/shipage.dart';
 import 'package:untitled3/thipaig.dart';
 
-void main() {
+void main()async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(MyApp());
 }
 

@@ -1,11 +1,55 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class Usersingup extends StatelessWidget {
   const Usersingup({super.key});
 
   @override
   Widget build(BuildContext context) {
+    TextEditingController name = TextEditingController();
+
+    TextEditingController email = TextEditingController();
+    TextEditingController password = TextEditingController();
+    TextEditingController confirm_password = TextEditingController();
+    Future<void> _signInWithGoogle(BuildContext context) async {
+      try {
+        final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+        if (googleUser == null) return;
+
+        final GoogleSignInAuthentication googleAuth =
+            await googleUser.authentication;
+
+        final credential = GoogleAuthProvider.credential(
+          accessToken: googleAuth.accessToken,
+          idToken: googleAuth.idToken,
+        );
+
+        UserCredential userCredential =
+            await FirebaseAuth.instance.signInWithCredential(credential);
+
+        if (userCredential.additionalUserInfo!.isNewUser) {
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(userCredential.user!.uid)
+              .set({
+            'name': userCredential.user!.displayName,
+            'email': userCredential.user!.email,
+            'role': 'user',
+          });
+        }
+
+        Navigator.pushNamed(context, "homepage");
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              content: Text('Error signing in with Google: ${e.toString()}')),
+        );
+      }
+    }
+
     return Directionality(
       textDirection: TextDirection.ltr, // دعم اتجاه RTL
       child: Scaffold(
@@ -57,6 +101,7 @@ class Usersingup extends StatelessWidget {
                     ),
                     const SizedBox(height: 5),
                     TextField(
+                      controller: name,
                       textAlign: TextAlign.right,
                       style: TextStyle(fontSize: 20),
                       decoration: InputDecoration(
@@ -89,6 +134,7 @@ class Usersingup extends StatelessWidget {
                     ),
                     const SizedBox(height: 5),
                     TextField(
+                      controller: email,
                       textAlign: TextAlign.right,
                       style: TextStyle(fontSize: 16),
                       decoration: InputDecoration(
@@ -121,6 +167,7 @@ class Usersingup extends StatelessWidget {
                     ),
                     const SizedBox(height: 5),
                     TextField(
+                      controller: password,
                       obscureText: true,
                       textAlign: TextAlign.right,
                       style: TextStyle(fontSize: 16),
@@ -154,6 +201,7 @@ class Usersingup extends StatelessWidget {
                     ),
                     const SizedBox(height: 5),
                     TextField(
+                      controller: confirm_password,
                       obscureText: true,
                       textAlign: TextAlign.right,
                       style: TextStyle(fontSize: 20),
@@ -190,7 +238,30 @@ class Usersingup extends StatelessWidget {
                         borderRadius: BorderRadius.circular(20),
                       ),
                     ),
-                    onPressed: () {},
+                    onPressed: () async {
+                      if (password.text == confirm_password.text) {
+                        try {
+                          UserCredential user = await FirebaseAuth.instance
+                              .createUserWithEmailAndPassword(
+                                  email: email.text, password: password.text);
+                          user.user!.updateDisplayName(name.text);
+                          await FirebaseFirestore.instance
+                              .collection('users')
+                              .doc(user.user!.uid)
+                              .set({
+                            'name': name.text,
+                            'email': email.text,
+                            'role': 'user',
+                          });
+
+                          Navigator.pushNamed(context, "homepage");
+                        } on Exception catch (e) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('خطأ: ${e.toString()}')),
+                          );
+                        }
+                      }
+                    },
                     child: const Text(
                       'دخول',
                       style: TextStyle(
@@ -217,8 +288,11 @@ class Usersingup extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  FaIcon(FontAwesomeIcons.google,
-                      color: Colors.white, size: 30),
+                  GestureDetector(
+                    onTap: () => _signInWithGoogle(context),
+                    child: FaIcon(FontAwesomeIcons.google,
+                        color: Colors.white, size: 30),
+                  ),
                   const SizedBox(width: 60),
                   Icon(Icons.facebook, size: 40, color: Colors.white),
                 ],

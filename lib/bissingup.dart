@@ -1,9 +1,119 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
-class Bissingup extends StatelessWidget {
-  final Color backgroundColor = Color(0xFF0C552E);
-
+class Bissingup extends StatefulWidget {
   Bissingup({super.key});
+
+  @override
+  State<Bissingup> createState() => _BissingupState();
+}
+
+class _BissingupState extends State<Bissingup> {
+  final Color backgroundColor = Color(0xFF0C552E);
+  String? selected_item;
+  String? gender;
+  File? idImage;
+
+  TextEditingController business_name = TextEditingController();
+
+  TextEditingController email = TextEditingController();
+  TextEditingController city_of_residence = TextEditingController();
+
+  TextEditingController password = TextEditingController();
+  TextEditingController confirm_password = TextEditingController();
+  Future<void> pickImageSelectFromGallery() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(
+        source: ImageSource.gallery,
+        maxHeight: 800,
+        maxWidth: 800,
+        imageQuality: 50);
+
+    if (pickedFile != null) {
+      setState(() {
+        idImage = File(pickedFile.path);
+      });
+    }
+    Navigator.of(context).pop();
+  }
+
+  Future<void> pickImageSelectFromCamera() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(
+        source: ImageSource.camera,
+        maxHeight: 800,
+        maxWidth: 800,
+        imageQuality: 50);
+
+    if (pickedFile != null) {
+      setState(() {
+        idImage = File(pickedFile.path);
+      });
+    }
+    Navigator.of(context).pop();
+  }
+
+  Future<String?> _imageToBase64(File imageFile) async {
+    try {
+      List<int> imageBytes = await imageFile.readAsBytes();
+      String base64Image = base64Encode(imageBytes);
+      return base64Image;
+    } catch (e) {
+      print("Error converting image: $e");
+      return null;
+    }
+  }
+
+  Future<void> uploadData() async {
+    if (idImage == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('الرجاء اختيار صورة الهوية')),
+      );
+      return;
+    }
+
+    try {
+      String? base64Image = await _imageToBase64(idImage!);
+
+      if (base64Image == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('حدث خطأ في معالجة الصورة')),
+        );
+        return;
+      }
+
+      UserCredential userCredential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email.text,
+        password: password.text,
+      );
+
+      await FirebaseFirestore.instance
+          .collection("users")
+          .doc(userCredential.user!.uid)
+          .set({
+        "image_data": base64Image,
+        "business_name": business_name.text,
+        "email": email.text,
+        "city_of_residence": city_of_residence.text,
+        "gender": gender,
+        "business_type": selected_item,
+        "user_id": userCredential.user!.uid,
+        'role': 'user',
+      });
+      Navigator.pushNamed(context, "homepage");
+    } catch (e) {
+      print("Error creating account: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('حدث خطأ: ${e.toString()}')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,14 +158,17 @@ class Bissingup extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Column(
                   children: [
-                    buildField('اسم العمل', 'أدخل اسم العمل'),
+                    buildField('اسم العمل', 'أدخل اسم العمل', business_name),
                     buildField('البريد الإلكتروني',
-                        'أدخل البريد الإلكتروني الخاص بالعمل'),
+                        'أدخل البريد الإلكتروني الخاص بالعمل', email),
                     Row(
                       children: [
                         Expanded(
                           child: buildFieldWithIcon(
-                              'موقع العمل', 'مدينة الإقامة', Icons.location_on),
+                              'موقع العمل',
+                              'مدينة الإقامة',
+                              Icons.location_on,
+                              city_of_residence),
                         ),
                         SizedBox(width: 10),
                         Expanded(
@@ -84,15 +197,22 @@ class Bissingup extends StatelessWidget {
                     buildImagePicker('صورة الهوية المدنية',
                         'أرفع صورة عن الهوية المدنية من الأدام'),
                     buildFieldWithIcon(
-                        'كلمة السر', 'أدخل كلمة السر', Icons.lock,
-                        obscure: true),
-                    buildField('تأكيد كلمة السر', 'أدخل كلمة السر مرة أخرى',
-                        obscure: true),
+                      'كلمة السر',
+                      'أدخل كلمة السر',
+                      Icons.lock,
+                      password,
+                      obscure: true,
+                    ),
+                    buildField(
+                        'تأكيد كلمة السر',
+                        'أدخل كلمة السر مرة أخرى',
+                        obscure: true,
+                        confirm_password),
                     const SizedBox(height: 25),
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: uploadData,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Color(0xFFD8E4D3),
                           padding: EdgeInsets.symmetric(vertical: 15),
@@ -118,7 +238,12 @@ class Bissingup extends StatelessWidget {
     );
   }
 
-  Widget buildField(String label, String hint, {bool obscure = false}) {
+  Widget buildField(
+    String label,
+    String hint,
+    TextEditingController controller, {
+    bool obscure = false,
+  }) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Column(
@@ -127,6 +252,7 @@ class Bissingup extends StatelessWidget {
           Text(label, style: TextStyle(color: Colors.white, fontSize: 16)),
           const SizedBox(height: 5),
           TextField(
+            controller: controller,
             obscureText: obscure,
             textAlign: TextAlign.right,
             textDirection: TextDirection.rtl,
@@ -150,6 +276,7 @@ class Bissingup extends StatelessWidget {
   }
 
   Widget buildFieldWithIcon(String label, String hint, IconData icon,
+      TextEditingController controller,
       {bool obscure = false}) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
@@ -159,6 +286,7 @@ class Bissingup extends StatelessWidget {
           Text(label, style: TextStyle(color: Colors.white, fontSize: 16)),
           const SizedBox(height: 5),
           TextField(
+            controller: controller,
             obscureText: obscure,
             textAlign: TextAlign.right,
             textDirection: TextDirection.rtl,
@@ -220,7 +348,11 @@ class Bissingup extends StatelessWidget {
                 ),
               );
             }).toList(),
-            onChanged: (_) {},
+            onChanged: (item) {
+              setState(() {
+                selected_item = item;
+              });
+            },
           ),
         ],
       ),
@@ -253,7 +385,9 @@ class Bissingup extends StatelessWidget {
                 child: Text(value, textDirection: TextDirection.rtl),
               );
             }).toList(),
-            onChanged: (_) {},
+            onChanged: (value) {
+              gender = value;
+            },
           ),
         ],
       ),
@@ -278,7 +412,24 @@ class Bissingup extends StatelessWidget {
               children: [
                 IconButton(
                   icon: Icon(Icons.camera_alt, color: backgroundColor),
-                  onPressed: () {},
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: Text("اختيار طريقه تحميل الصوره "),
+                          actions: [
+                            TextButton(
+                                onPressed: pickImageSelectFromGallery,
+                                child: Text("من المعرض")),
+                            TextButton(
+                                onPressed: pickImageSelectFromCamera,
+                                child: Text("بأستخدام الكاميرا")),
+                          ],
+                        );
+                      },
+                    );
+                  },
                 ),
                 Expanded(
                   child: Text(

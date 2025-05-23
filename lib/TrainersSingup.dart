@@ -1,9 +1,146 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
-class trainerssingup extends StatelessWidget {
-  final Color backgroundColor = Color(0xFF0C552E);
-
+class trainerssingup extends StatefulWidget {
   trainerssingup({super.key});
+
+  @override
+  State<trainerssingup> createState() => _trainerssingupState();
+}
+
+class _trainerssingupState extends State<trainerssingup> {
+  final Color backgroundColor = Color(0xFF0C552E);
+  String? selected_item;
+  String? gender;
+  File? idImage;
+  File? work_practice_image;
+  TextEditingController city_of_residence = TextEditingController();
+
+  TextEditingController business_name = TextEditingController();
+  TextEditingController email = TextEditingController();
+
+  TextEditingController password = TextEditingController();
+  TextEditingController confirm_password = TextEditingController();
+  Future<void> pickImageSelectFromGallery() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(
+        source: ImageSource.gallery,
+        maxHeight: 800,
+        maxWidth: 800,
+        imageQuality: 50);
+
+    if (pickedFile != null) {
+      setState(() {
+        idImage = File(pickedFile.path);
+      });
+    }
+    Navigator.of(context).pop();
+  }
+
+  Future<void> pickImageSelectFromCamera() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(
+        source: ImageSource.camera,
+        maxHeight: 800,
+        maxWidth: 800,
+        imageQuality: 50);
+
+    if (pickedFile != null) {
+      setState(() {
+        idImage = File(pickedFile.path);
+      });
+    }
+    Navigator.of(context).pop();
+  }
+
+  Future<void> pickWorkImageFromGallery() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(
+        source: ImageSource.gallery,
+        maxHeight: 800,
+        maxWidth: 800,
+        imageQuality: 50);
+
+    if (pickedFile != null) {
+      setState(() {
+        work_practice_image = File(pickedFile.path);
+      });
+    }
+    Navigator.of(context).pop();
+  }
+
+  Future<void> pickWorkImageFromCamera() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(
+        source: ImageSource.camera,
+        maxHeight: 800,
+        maxWidth: 800,
+        imageQuality: 50);
+
+    if (pickedFile != null) {
+      setState(() {
+        work_practice_image = File(pickedFile.path);
+      });
+    }
+    Navigator.of(context).pop();
+  }
+
+  Future<String?> _imageToBase64(File imageFile) async {
+    try {
+      List<int> imageBytes = await imageFile.readAsBytes();
+      String base64Image = base64Encode(imageBytes);
+      return base64Image;
+    } catch (e) {
+      print("Error converting image: $e");
+      return null;
+    }
+  }
+
+  Future<void> uploadData() async {
+    try {
+      String? base64IdImage =
+          idImage != null ? await _imageToBase64(idImage!) : null;
+      String? base64WorkImage = work_practice_image != null
+          ? await _imageToBase64(work_practice_image!)
+          : null;
+
+      if (base64IdImage == null || base64WorkImage == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('يجب تحميل كلا الصورتين')),
+        );
+        return;
+      }
+      UserCredential userCredential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email.text,
+        password: password.text,
+      );
+      await FirebaseFirestore.instance
+          .collection("users")
+          .doc(userCredential.user!.uid)
+          .set({
+        "business_name": business_name.text,
+        "email": email.text,
+        "business_type": selected_item,
+        "city_of_residence": city_of_residence.text,
+        "gender": gender,
+        "image_data": base64IdImage,
+        "work_practice_image": base64WorkImage,
+        'role': 'user',
+      });
+      Navigator.pushNamed(context, "homepage");
+    } catch (e) {
+      print("Error creating account: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('حدث خطأ: ${e.toString()}')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,15 +163,13 @@ class trainerssingup extends StatelessWidget {
               ),
               child: AppBar(
                 centerTitle: true,
-                title: Text(
-                  'sign up',
-                  style: TextStyle(
-                    color: Color(0xFF0B5022),
-                    fontWeight: FontWeight.w900,
-                    fontSize: 40,
-                    fontFamily: "IBMPlexSansArabic",
-                  ),
-                ),
+                title: Text('sign up',
+                    style: TextStyle(
+                      color: Color(0xFF0B5022),
+                      fontWeight: FontWeight.w900,
+                      fontSize: 40,
+                      fontFamily: "IBMPlexSansArabic",
+                    )),
                 backgroundColor: Colors.transparent,
                 elevation: 0,
               ),
@@ -50,20 +185,37 @@ class trainerssingup extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Column(
                   children: [
-                    buildField('اسم العمل', 'أدخل اسم العمل'),
+                    buildField('اسم العمل', 'أدخل اسم العمل', business_name),
                     buildField('البريد الإلكتروني',
-                        'أدخل البريد الإلكتروني الخاص بالعمل'),
+                        'أدخل البريد الإلكتروني الخاص بالعمل', email),
                     Row(
                       children: [
                         Expanded(
                           child: buildFieldWithIcon(
-                              'موقع العمل', 'مدينة الإقامة', Icons.location_on),
+                              'موقع العمل',
+                              'مدينة الإقامة',
+                              Icons.location_on,
+                              city_of_residence),
                         ),
                         SizedBox(width: 10),
                         Expanded(
                           child: buildDropdownWithIcons('نوع العمل', [
-                            {'label': 'مدرب رياضي', 'image': 'null'},
-                            {'label': 'اخصائي تغذية', 'image': 'null'},
+                            {
+                              'label': 'كمال الاجسام',
+                              'image': 'img/damble.png',
+                            },
+                            {
+                              'label': 'اكاديمية كره',
+                              'image': 'img/football.png',
+                            },
+                            {
+                              'label': 'مسبح',
+                              'image': 'img/bool.png',
+                            },
+                            {
+                              'label': 'فنون قتاليه',
+                              'image': 'img/kill.png',
+                            },
                           ]),
                         ),
                       ],
@@ -72,26 +224,70 @@ class trainerssingup extends StatelessWidget {
                     Row(
                       children: [
                         Expanded(
-                          child: buildImagePicker('صورة الهوية المدنية',
-                              'أرفع صورة عن الهوية المدنية من الأدام'),
+                          child: buildImagePicker(
+                            'صورة الهوية المدنية',
+                            'أرفع صورة عن الهوية المدنية من الأدام',
+                            () {
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    title: Text("اختيار طريقه تحميل الصوره "),
+                                    actions: [
+                                      TextButton(
+                                          onPressed: pickImageSelectFromGallery,
+                                          child: Text("من المعرض")),
+                                      TextButton(
+                                          onPressed: pickImageSelectFromCamera,
+                                          child: Text("بأستخدام الكاميرا")),
+                                    ],
+                                  );
+                                },
+                              );
+                            },
+                          ),
                         ),
                         SizedBox(width: 10),
                         Expanded(
                           child: buildImagePicker(
-                              'صورة مزاولة العمل', 'أرفع صورة عن مزاولة العمل'),
+                            'صورة مزاولة العمل',
+                            'أرفع صورة عن مزاولة العمل',
+                            () {
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    title: Text("اختيار طريقه تحميل الصوره "),
+                                    actions: [
+                                      TextButton(
+                                          onPressed: pickWorkImageFromGallery,
+                                          child: Text("من المعرض")),
+                                      TextButton(
+                                          onPressed: pickWorkImageFromCamera,
+                                          child: Text("بأستخدام الكاميرا")),
+                                    ],
+                                  );
+                                },
+                              );
+                            },
+                          ),
                         ),
                       ],
                     ),
                     buildFieldWithIcon(
-                        'كلمة السر', 'أدخل كلمة السر', Icons.lock,
-                        obscure: true),
+                        'كلمة السر',
+                        'أدخل كلمة السر',
+                        Icons.lock,
+                        obscure: true,
+                        password),
                     buildField('تأكيد كلمة السر', 'أدخل كلمة السر مرة أخرى',
+                        confirm_password,
                         obscure: true),
                     const SizedBox(height: 25),
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: uploadData,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Color(0xFFD8E4D3),
                           padding: EdgeInsets.symmetric(vertical: 15),
@@ -117,7 +313,8 @@ class trainerssingup extends StatelessWidget {
     );
   }
 
-  Widget buildField(String label, String hint, {bool obscure = false}) {
+  Widget buildField(String label, String hint, TextEditingController controller,
+      {bool obscure = false}) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Column(
@@ -149,6 +346,7 @@ class trainerssingup extends StatelessWidget {
   }
 
   Widget buildFieldWithIcon(String label, String hint, IconData icon,
+      TextEditingController controller,
       {bool obscure = false}) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
@@ -205,13 +403,23 @@ class trainerssingup extends StatelessWidget {
             items: items.map((Map<String, dynamic> item) {
               return DropdownMenuItem<String>(
                 value: item['label'],
-                child: Text(
-                  item['label'],
-                  textDirection: TextDirection.rtl,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(item['label'], textDirection: TextDirection.rtl),
+                    SizedBox(width: 10),
+                    Image.asset(
+                      item['image'],
+                      width: 24,
+                      height: 24,
+                    ),
+                  ],
                 ),
               );
             }).toList(),
-            onChanged: (_) {},
+            onChanged: (item) {
+              selected_item = item;
+            },
           ),
         ],
       ),
@@ -244,14 +452,19 @@ class trainerssingup extends StatelessWidget {
                 child: Text(value, textDirection: TextDirection.rtl),
               );
             }).toList(),
-            onChanged: (_) {},
+            onChanged: (item) {
+              setState(() {
+                gender = item;
+              });
+            },
           ),
         ],
       ),
     );
   }
 
-  Widget buildImagePicker(String label, String hint) {
+  Widget buildImagePicker(
+      String label, String hint, final VoidCallback onPressed) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Column(
@@ -269,7 +482,7 @@ class trainerssingup extends StatelessWidget {
               children: [
                 IconButton(
                   icon: Icon(Icons.camera_alt, color: backgroundColor),
-                  onPressed: () {},
+                  onPressed: onPressed,
                 ),
                 Expanded(
                   child: Text(

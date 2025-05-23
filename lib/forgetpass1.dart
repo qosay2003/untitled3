@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:untitled3/forgetpass2.dart';
 
@@ -7,6 +8,8 @@ class forgetpass1 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TextEditingController email = TextEditingController();
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xFF0B5022),
@@ -72,6 +75,7 @@ class forgetpass1 extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(15),
               child: TextField(
+                controller: email,
                 textAlign: TextAlign.right,
                 decoration: InputDecoration(
                   filled: true,
@@ -94,10 +98,20 @@ class forgetpass1 extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(15),
               child: ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) =>
-                          OTPScreen())); // إضافة وظيفة الزر هنا
+                onPressed: () async {
+                  try {
+                    await FirebaseAuth.instance
+                        .sendPasswordResetEmail(email: email.text);
+                    Navigator.pushNamed(context, 'mlogin');
+                  } on Exception catch (e) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('خطأ: ${e.toString()}')),
+                    );
+                  }
+
+                  // Navigator.of(context).push(MaterialPageRoute(
+                  //     builder: (context) =>
+                  //         OTPScreen())); // إضافة وظيفة الزر هنا
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.white,
