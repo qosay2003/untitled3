@@ -1,3 +1,7 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:untitled3/Placesscreen.dart';
 import 'package:untitled3/calcbot.dart';
@@ -350,523 +354,543 @@ class _HomepageState extends State<Homepage> {
               ),
           ],
         ),
-        body: SafeArea(
-            child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(right: 16.0, top: 16),
-                  child: Text(
-                    "معلوماتي",
-                    style: TextStyle(
-                        fontSize: 28,
-                        color: Colors.black,
-                        shadows: [
-                          Shadow(
+        body: StreamBuilder<QuerySnapshot>(
+          stream: FirebaseFirestore.instance
+              .collection("bestClubsOptions")
+              .snapshots(),
+          builder: (context, snapshot) {
+            final data = snapshot.data!.docs;
+
+            if (!snapshot.hasData)
+              return Center(child: CircularProgressIndicator());
+            return SafeArea(
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(right: 16.0, top: 16),
+                        child: Text(
+                          "معلوماتي",
+                          style: TextStyle(
+                              fontSize: 28,
                               color: Colors.black,
-                              blurRadius: 5,
-                              offset: Offset(1, 1))
-                        ]),
-                    textDirection: TextDirection.rtl,
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Row(
-              children: [
-                SizedBox(
-                  width: 40,
-                ),
-                Expanded(
-                  flex: 1,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => CalorieCalculatorScreen()));
-                    },
-                    style: ElevatedButton.styleFrom(
-                      elevation: 20,
-                      backgroundColor: Color(0xFFAAAAAA),
-                      padding: EdgeInsets.zero,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                    child: Image.asset(
-                      "img/ai2.png",
-                      width: 150,
-                      height: 150,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: 40,
-                ),
-                Expanded(
-                  flex: 1,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => Healthypage()));
-                    },
-                    style: ElevatedButton.styleFrom(
-                      elevation: 20,
-                      backgroundColor: Color.fromRGBO(170, 170, 170, 1),
-                      padding: EdgeInsets.all(0),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                    child: Image.asset(
-                      "img/ai1.png",
-                      width: 150,
-                      height: 150,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: 40,
-                )
-              ],
-            ),
-            Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-              SizedBox(
-                width: 30,
-              ),
-              Expanded(
-                flex: 1,
-                child: Container(
-                  child: Padding(
-                    padding: const EdgeInsets.all(4),
-                    child: Text(
-                      "احسب سعراتك ",
-                      style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF0B5022),
-                          shadows: [
-                            Shadow(
-                                color: Color(0xFF0B5022),
-                                blurRadius: 5,
-                                offset: Offset(1, 1))
-                          ]),
-                      textDirection: TextDirection.rtl,
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                width: 70,
-              ),
-              Expanded(
-                flex: 1,
-                child: Container(
-                  child: Padding(
-                    padding: const EdgeInsets.all(4),
-                    child: Text(
-                      "تابع تطورك الصحي",
-                      style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF0B5022),
-                          shadows: [
-                            Shadow(
-                                color: Color(0xFF0B5022),
-                                blurRadius: 5,
-                                offset: Offset(1, 1))
-                          ]),
-                      textDirection: TextDirection.rtl,
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                width: 50,
-              )
-            ]),
-            SizedBox(
-              height: 10,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(right: 16.0, top: 16),
-                  child: Text(
-                    "الأقسام الرئيسية",
-                    style: TextStyle(
-                        fontSize: 28,
-                        color: Colors.black,
-                        shadows: [
-                          Shadow(
-                              color: Colors.black,
-                              blurRadius: 5,
-                              offset: Offset(1, 1))
-                        ]),
-                    textDirection: TextDirection.rtl,
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Row(
-              children: [
-                SizedBox(
-                  width: 40,
-                ),
-                Expanded(
-                  flex: 1,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) =>
-                              PlacesScreen(mainTitle: 'أكاديميات السباحة')));
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFFD9D9D9),
-                      elevation: 5,
-                      padding: EdgeInsets.zero,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                    child: Image.asset(
-                      "img/bool.png",
-                      width: 50,
-                      height: 50,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: 40,
-                ),
-                Expanded(
-                  flex: 1,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) =>
-                              PlacesScreen(mainTitle: 'نوادي كمال الأجسام')));
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFFD9D9D9),
-                      elevation: 5,
-                      padding: EdgeInsets.all(0),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                    child: Image.asset(
-                      "img/damble.png",
-                      width: 50,
-                      height: 50,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: 40,
-                ),
-                Expanded(
-                  flex: 1,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => PlacesScreen(
-                              mainTitle: 'أكاديميات الفنون القتالية')));
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFFD9D9D9),
-                      elevation: 5,
-                      padding: EdgeInsets.zero,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                    child: Image.asset(
-                      "img/kill.png",
-                      width: 50,
-                      height: 50,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: 40,
-                ),
-                Expanded(
-                  flex: 1,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) =>
-                              PlacesScreen(mainTitle: 'أكاديميات كرة القدم')));
-                    },
-                    style: ElevatedButton.styleFrom(
-                      elevation: 5,
-                      backgroundColor: Color(0xFFD9D9D9),
-                      padding: EdgeInsets.all(-8),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                    child: Image.asset(
-                      "img/football.png",
-                      width: 50,
-                      height: 50,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: 30,
-                )
-              ],
-            ),
-            Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-              SizedBox(
-                width: 30,
-              ),
-              Expanded(
-                flex: 1,
-                child: Container(
-                  child: Padding(
-                    padding: const EdgeInsets.all(4),
-                    child: Text(
-                      textAlign: TextAlign.center,
-                      "أكاديميات سباحة ",
-                      style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF0B5022),
-                          shadows: [
-                            Shadow(
-                                color: Color(0xFF0B5022),
-                                blurRadius: 5,
-                                offset: Offset(1, 1))
-                          ]),
-                      textDirection: TextDirection.rtl,
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                width: 20,
-              ),
-              Expanded(
-                flex: 1,
-                child: Container(
-                  child: Padding(
-                    padding: const EdgeInsets.all(4),
-                    child: Text(
-                      textAlign: TextAlign.center,
-                      "نوادي كمال \nاجسام",
-                      style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF0B5022),
-                          shadows: [
-                            Shadow(
-                                color: Color(0xFF0B5022),
-                                blurRadius: 5,
-                                offset: Offset(1, 1))
-                          ]),
-                      textDirection: TextDirection.rtl,
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              Expanded(
-                flex: 1,
-                child: Container(
-                  child: Padding(
-                    padding: const EdgeInsets.all(4),
-                    child: Text(
-                      " أكاديميات فنون قتالية ",
-                      style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF0B5022),
-                          shadows: [
-                            Shadow(
-                                color: Color(0xFF0B5022),
-                                blurRadius: 5,
-                                offset: Offset(1, 1))
-                          ]),
-                      textDirection: TextDirection.rtl,
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                width: 20,
-              ),
-              Expanded(
-                flex: 1,
-                child: Container(
-                  child: Padding(
-                    padding: const EdgeInsets.all(4),
-                    child: Text(
-                      "أكاديميات \n كرةالقدم",
-                      style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF0B5022),
-                          shadows: [
-                            Shadow(
-                                color: Color(0xFF0B5022),
-                                blurRadius: 5,
-                                offset: Offset(1, 1))
-                          ]),
-                      textDirection: TextDirection.rtl,
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                width: 25,
-              )
-            ]),
-            SizedBox(
-              height: 20,
-            ),
-            Row(
-              children: [
-                Expanded(
-                  flex: 4,
-                  child: Container(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => GymProfileViewScreen(
-                                  cityController: TextEditingController(),
-                                  areaController: TextEditingController(),
-                                  allweekdayHoursController:
-                                      TextEditingController(),
-                                  priceMonthController: TextEditingController(),
-                                  price3MonthsController:
-                                      TextEditingController(),
-                                  priceYearController: TextEditingController(),
-                                )));
-                      },
-                      style: ElevatedButton.styleFrom(
-                        elevation: 10,
-                        backgroundColor: Color.fromRGBO(170, 170, 170, 1),
-                        padding: EdgeInsets.all(0),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
+                              shadows: [
+                                Shadow(
+                                    color: Colors.black,
+                                    blurRadius: 5,
+                                    offset: Offset(1, 1))
+                              ]),
+                          textDirection: TextDirection.rtl,
                         ),
                       ),
-                      child: Image.asset(
-                        "img/buttonhome.png",
-                        width: 400,
-                        height: 50,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
+                    ],
                   ),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                Container(
-                  color: Colors.red,
-                )
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(right: 16.0, top: 16),
-                  child: Text(
-                    "افضل الخيارات",
-                    style: TextStyle(
-                        fontSize: 28,
-                        color: Colors.black,
-                        shadows: [
-                          Shadow(
-                              color: Colors.black,
-                              blurRadius: 5,
-                              offset: Offset(1, 1))
-                        ]),
-                    textDirection: TextDirection.rtl,
+                  SizedBox(
+                    height: 20,
                   ),
-                ),
-              ],
-            ),
-            Container(
-              height: 200,
-              width: double.infinity,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: club.length,
-                itemBuilder: (context, index) {
-                  return Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                    width: 180,
-                    height: 100,
-                    child: Card(
-                      color: Colors.grey,
-                      elevation: 5,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
+                  Row(
+                    children: [
+                      SizedBox(
+                        width: 40,
                       ),
-                      child: ListTile(
-                        onTap: () {},
-                        title: Image.asset(
-                          club[index]['image'],
-                          width: 80,
-                          height: 80,
-                          fit: BoxFit.cover,
+                      Expanded(
+                        flex: 1,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) =>
+                                    CalorieCalculatorScreen()));
+                          },
+                          style: ElevatedButton.styleFrom(
+                            elevation: 20,
+                            backgroundColor: Color(0xFFAAAAAA),
+                            padding: EdgeInsets.zero,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          child: Image.asset(
+                            "img/ai2.png",
+                            width: 150,
+                            height: 150,
+                            fit: BoxFit.cover,
+                          ),
                         ),
-                        subtitle: Column(
-                          children: [
-                            Text(
-                              club[index]['text'],
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 14,
+                      ),
+                      SizedBox(
+                        width: 40,
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => Healthypage()));
+                          },
+                          style: ElevatedButton.styleFrom(
+                            elevation: 20,
+                            backgroundColor: Color.fromRGBO(170, 170, 170, 1),
+                            padding: EdgeInsets.all(0),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          child: Image.asset(
+                            "img/ai1.png",
+                            width: 150,
+                            height: 150,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 40,
+                      )
+                    ],
+                  ),
+                  Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+                    SizedBox(
+                      width: 30,
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: Container(
+                        child: Padding(
+                          padding: const EdgeInsets.all(4),
+                          child: Text(
+                            "احسب سعراتك ",
+                            style: TextStyle(
+                                fontSize: 16,
                                 fontWeight: FontWeight.bold,
                                 color: Color(0xFF0B5022),
-                              ),
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: List.generate(
-                                  5,
-                                  (i) => Icon(
-                                        Icons.star,
-                                        size: 20,
-                                        color: i < club[index]['rating']
-                                            ? Color(0xFF0B5022)
-                                            : Colors.white,
-                                      )),
-                            ),
-                          ],
+                                shadows: [
+                                  Shadow(
+                                      color: Color(0xFF0B5022),
+                                      blurRadius: 5,
+                                      offset: Offset(1, 1))
+                                ]),
+                            textDirection: TextDirection.rtl,
+                          ),
                         ),
                       ),
                     ),
-                  );
-                },
+                    SizedBox(
+                      width: 70,
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: Container(
+                        child: Padding(
+                          padding: const EdgeInsets.all(4),
+                          child: Text(
+                            "تابع تطورك الصحي",
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFF0B5022),
+                                shadows: [
+                                  Shadow(
+                                      color: Color(0xFF0B5022),
+                                      blurRadius: 5,
+                                      offset: Offset(1, 1))
+                                ]),
+                            textDirection: TextDirection.rtl,
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 50,
+                    )
+                  ]),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(right: 16.0, top: 16),
+                        child: Text(
+                          "الأقسام الرئيسية",
+                          style: TextStyle(
+                              fontSize: 28,
+                              color: Colors.black,
+                              shadows: [
+                                Shadow(
+                                    color: Colors.black,
+                                    blurRadius: 5,
+                                    offset: Offset(1, 1))
+                              ]),
+                          textDirection: TextDirection.rtl,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Row(
+                    children: [
+                      SizedBox(
+                        width: 40,
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => PlacesScreen(
+                                    mainTitle: 'أكاديميات السباحة')));
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Color(0xFFD9D9D9),
+                            elevation: 5,
+                            padding: EdgeInsets.zero,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          child: Image.asset(
+                            "img/bool.png",
+                            width: 50,
+                            height: 50,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 40,
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => PlacesScreen(
+                                    mainTitle: 'نوادي كمال الأجسام')));
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Color(0xFFD9D9D9),
+                            elevation: 5,
+                            padding: EdgeInsets.all(0),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          child: Image.asset(
+                            "img/damble.png",
+                            width: 50,
+                            height: 50,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 40,
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => PlacesScreen(
+                                    mainTitle: 'أكاديميات الفنون القتالية')));
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Color(0xFFD9D9D9),
+                            elevation: 5,
+                            padding: EdgeInsets.zero,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          child: Image.asset(
+                            "img/kill.png",
+                            width: 50,
+                            height: 50,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 40,
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => PlacesScreen(
+                                    mainTitle: 'أكاديميات كرة القدم')));
+                          },
+                          style: ElevatedButton.styleFrom(
+                            elevation: 5,
+                            backgroundColor: Color(0xFFD9D9D9),
+                            padding: EdgeInsets.all(-8),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          child: Image.asset(
+                            "img/football.png",
+                            width: 50,
+                            height: 50,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 30,
+                      )
+                    ],
+                  ),
+                  Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+                    SizedBox(
+                      width: 30,
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: Container(
+                        child: Padding(
+                          padding: const EdgeInsets.all(4),
+                          child: Text(
+                            textAlign: TextAlign.center,
+                            "أكاديميات سباحة ",
+                            style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFF0B5022),
+                                shadows: [
+                                  Shadow(
+                                      color: Color(0xFF0B5022),
+                                      blurRadius: 5,
+                                      offset: Offset(1, 1))
+                                ]),
+                            textDirection: TextDirection.rtl,
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 20,
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: Container(
+                        child: Padding(
+                          padding: const EdgeInsets.all(4),
+                          child: Text(
+                            textAlign: TextAlign.center,
+                            "نوادي كمال \nاجسام",
+                            style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFF0B5022),
+                                shadows: [
+                                  Shadow(
+                                      color: Color(0xFF0B5022),
+                                      blurRadius: 5,
+                                      offset: Offset(1, 1))
+                                ]),
+                            textDirection: TextDirection.rtl,
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: Container(
+                        child: Padding(
+                          padding: const EdgeInsets.all(4),
+                          child: Text(
+                            " أكاديميات فنون قتالية ",
+                            style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFF0B5022),
+                                shadows: [
+                                  Shadow(
+                                      color: Color(0xFF0B5022),
+                                      blurRadius: 5,
+                                      offset: Offset(1, 1))
+                                ]),
+                            textDirection: TextDirection.rtl,
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 20,
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: Container(
+                        child: Padding(
+                          padding: const EdgeInsets.all(4),
+                          child: Text(
+                            "أكاديميات \n كرةالقدم",
+                            style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFF0B5022),
+                                shadows: [
+                                  Shadow(
+                                      color: Color(0xFF0B5022),
+                                      blurRadius: 5,
+                                      offset: Offset(1, 1))
+                                ]),
+                            textDirection: TextDirection.rtl,
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 25,
+                    )
+                  ]),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        flex: 4,
+                        child: Container(
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => GymProfileViewScreen(
+                                        cityController: TextEditingController(),
+                                        areaController: TextEditingController(),
+                                        allweekdayHoursController:
+                                            TextEditingController(),
+                                        priceMonthController:
+                                            TextEditingController(),
+                                        price3MonthsController:
+                                            TextEditingController(),
+                                        priceYearController:
+                                            TextEditingController(),
+                                      )));
+                            },
+                            style: ElevatedButton.styleFrom(
+                              elevation: 10,
+                              backgroundColor: Color.fromRGBO(170, 170, 170, 1),
+                              padding: EdgeInsets.all(0),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                            ),
+                            child: Image.asset(
+                              "img/buttonhome.png",
+                              width: 400,
+                              height: 50,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Container(
+                        color: Colors.red,
+                      )
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(right: 16.0, top: 16),
+                        child: Text(
+                          "افضل الخيارات",
+                          style: TextStyle(
+                              fontSize: 28,
+                              color: Colors.black,
+                              shadows: [
+                                Shadow(
+                                    color: Colors.black,
+                                    blurRadius: 5,
+                                    offset: Offset(1, 1))
+                              ]),
+                          textDirection: TextDirection.rtl,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Container(
+                    height: 200,
+                    width: double.infinity,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: data.length,
+                      itemBuilder: (context, index) {
+                        Uint8List bytes =
+                            base64Decode(data[index]["club_image"]);
+                        return Container(
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                          width: 180,
+                          height: 100,
+                          child: Card(
+                            color: Colors.grey,
+                            elevation: 5,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: ListTile(
+                              onTap: () {},
+                              title: Image.memory(
+                                bytes,
+                                width: 80,
+                                height: 80,
+                                fit: BoxFit.cover,
+                              ),
+                              subtitle: Column(
+                                children: [
+                                  Text(
+                                    data[index]["club_name"],
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xFF0B5022),
+                                    ),
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: List.generate(
+                                        5,
+                                        (i) => Icon(
+                                              Icons.star,
+                                              size: 20,
+                                              color: i <
+                                                      data[index]
+                                                          ["club_evaluation"]
+                                                  ? Color(0xFF0B5022)
+                                                  : Colors.white,
+                                            )),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  )
+                ],
               ),
-            )
-          ],
-        )));
+            );
+          },
+        ));
   }
 }
 
