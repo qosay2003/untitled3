@@ -1,8 +1,11 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:untitled3/Placesscreen.dart';
 import 'package:untitled3/calcbot.dart';
 import 'package:untitled3/chatuserlist.dart';
@@ -20,32 +23,128 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
-  List club = [
-    {
-      'image': 'img/damble.png',
-      "text": "اكاديمية البر الرياضيه",
-      "icon": Icons.star,
-      "rating": 4 // عدد النجوم المملوءة
-    },
-    {
-      'image': 'img/damble.png',
-      "text": "اكاديمية البر الرياضيه",
-      "icon": Icons.star,
-      "rating": 3
-    },
-    {
-      'image': 'img/damble.png',
-      "text": "اكاديمية البر الرياضيه",
-      "icon": Icons.star,
-      "rating": 5
-    },
-    {
-      'image': 'img/damble.png',
-      "text": "اكاديمية البر الرياضيه",
-      "icon": Icons.star,
-      "rating": 2
-    },
-  ];
+  File? user_image;
+  Future<void> pickImageSelectFromGallery() async {
+    try {
+      final picker = ImagePicker();
+      final pickedFile = await picker.pickImage(
+        source: ImageSource.gallery,
+        maxHeight: 800,
+        maxWidth: 800,
+        imageQuality: 50,
+      );
+
+      if (pickedFile != null) {
+        setState(() {
+          user_image = File(pickedFile.path);
+        });
+
+        await uploadData();
+      }
+      Navigator.of(context).pop();
+    } catch (e) {
+      Navigator.of(context).pop();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to select image: ${e.toString()}')),
+      );
+    }
+  }
+
+  Future<void> pickImageSelectFromCamera() async {
+    try {
+      final picker = ImagePicker();
+      final pickedFile = await picker.pickImage(
+        source: ImageSource.camera,
+        maxHeight: 800,
+        maxWidth: 800,
+        imageQuality: 50,
+      );
+
+      if (pickedFile != null) {
+        setState(() {
+          user_image = File(pickedFile.path);
+        });
+
+        await uploadData();
+      }
+      Navigator.of(context).pop();
+    } catch (e) {
+      Navigator.of(context).pop();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to capture image: ${e.toString()}')),
+      );
+    }
+  }
+
+  Future<String> _imageToBase64(File imageFile) async {
+    try {
+      List<int> imageBytes = await imageFile.readAsBytes();
+      return base64Encode(imageBytes);
+    } catch (e) {
+      print("Error converting image: $e");
+      throw Exception("Failed to convert image to base64");
+    }
+  }
+
+  Future<void> uploadData() async {
+    if (user_image == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Please select an image first')),
+      );
+      return;
+    }
+
+    try {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => Center(child: CircularProgressIndicator()),
+      );
+
+      String base64Image = await _imageToBase64(user_image!);
+
+      String userId = FirebaseAuth.instance.currentUser!.uid;
+
+      await FirebaseFirestore.instance.collection("users").doc(userId).update({
+        "image_data": base64Image,
+        "last_updated": FieldValue.serverTimestamp(),
+      });
+
+      Navigator.of(context).pop();
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Image uploaded successfully!')),
+      );
+    } catch (e) {
+      Navigator.of(context).pop();
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to upload image: ${e.toString()}')),
+      );
+    }
+  }
+
+  Future<Uint8List?> getUserImage() async {
+    try {
+      String userId = FirebaseAuth.instance.currentUser!.uid;
+      DocumentSnapshot userDoc = await FirebaseFirestore.instance
+          .collection("users")
+          .doc(userId)
+          .get();
+
+      if (userDoc.exists && userDoc.data() != null) {
+        String? base64Image =
+            (userDoc.data() as Map<String, dynamic>)['image_data'];
+        if (base64Image != null && base64Image.isNotEmpty) {
+          return base64Decode(base64Image);
+        }
+      }
+      return null;
+    } catch (e) {
+      print("Error fetching user image: $e");
+      return null;
+    }
+  }
 
   // قائمة افتراضية لعدد الرسائل غير المقروءة (بديل مؤقت لقاعدة البيانات)
   final List<Map<String, dynamic>> users = const [
@@ -157,7 +256,8 @@ class _HomepageState extends State<Homepage> {
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: Center(
                 child: Text(
-                  "احمد محسن",
+                  FirebaseAuth.instance.currentUser?.displayName.toString() ??
+                      "user",
                   style: TextStyle(
                     shadows: [
                       Shadow(
@@ -179,9 +279,23 @@ class _HomepageState extends State<Homepage> {
               height: 50,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(100),
-                child: Image.asset(
-                  "img/my.jpeg",
-                  fit: BoxFit.cover,
+                child: FutureBuilder<Uint8List?>(
+                  future: getUserImage(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return CircularProgressIndicator();
+                    } else if (snapshot.hasData && snapshot.data != null) {
+                      return Image.memory(
+                        snapshot.data!,
+                        fit: BoxFit.cover,
+                      );
+                    } else {
+                      return Image.asset(
+                        "img/my.jpeg",
+                        fit: BoxFit.cover,
+                      );
+                    }
+                  },
                 ),
               ),
             ),
@@ -219,7 +333,9 @@ class _HomepageState extends State<Homepage> {
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             Text(
-                              'أحمد محسن',
+                              FirebaseAuth.instance.currentUser?.displayName
+                                      .toString() ??
+                                  "user",
                               style: TextStyle(
                                 color: Color(0xFF0B5022),
                                 fontSize: 16,
@@ -228,7 +344,8 @@ class _HomepageState extends State<Homepage> {
                               textAlign: TextAlign.end,
                             ),
                             Text(
-                              'ahmed@example.com',
+                              FirebaseAuth.instance.currentUser?.email ??
+                                  "user@email.com",
                               style: TextStyle(
                                 color: Color(0xFF0B5022),
                                 fontSize: 14,
@@ -242,12 +359,29 @@ class _HomepageState extends State<Homepage> {
                           width: 60,
                           height: 60,
                           child: ClipRRect(
-                              borderRadius: BorderRadius.circular(60),
-                              child: Image.asset(
-                                "img/my.jpeg",
-                                fit: BoxFit.cover,
-                              )),
-                        ),
+                            borderRadius: BorderRadius.circular(60),
+                            child: FutureBuilder<Uint8List?>(
+                              future: getUserImage(),
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return CircularProgressIndicator();
+                                } else if (snapshot.hasData &&
+                                    snapshot.data != null) {
+                                  return Image.memory(
+                                    snapshot.data!,
+                                    fit: BoxFit.cover,
+                                  );
+                                } else {
+                                  return Image.asset(
+                                    "img/my.jpeg",
+                                    fit: BoxFit.cover,
+                                  );
+                                }
+                              },
+                            ),
+                          ),
+                        )
                       ],
                     ),
                   ],
@@ -275,7 +409,24 @@ class _HomepageState extends State<Homepage> {
                   'تغيير الصوره',
                   textAlign: TextAlign.end,
                 ),
-                onTap: () {},
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: Text("اختيار طريقه تحميل الصوره "),
+                        actions: [
+                          TextButton(
+                              onPressed: pickImageSelectFromGallery,
+                              child: Text("من المعرض")),
+                          TextButton(
+                              onPressed: pickImageSelectFromCamera,
+                              child: Text("بأستخدام الكاميرا")),
+                        ],
+                      );
+                    },
+                  );
+                },
               ),
               ListTile(
                 trailing: Icon(
