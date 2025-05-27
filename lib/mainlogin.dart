@@ -62,6 +62,7 @@ class _LoginScreenState extends State<mainlogin> {
                     SizedBox(height: 250), // مسافة لتجنب التداخل مع اللوغو
                     // حقل البريد الإلكتروني
                     TextField(
+                      controller: email,
                       decoration: InputDecoration(
                         prefixIcon: Icon(
                           Icons.person,
@@ -80,6 +81,7 @@ class _LoginScreenState extends State<mainlogin> {
                     SizedBox(height: 30),
                     // حقل كلمة المرور
                     TextField(
+                      controller: password,
                       obscureText: _obscureText,
                       decoration: InputDecoration(
                         prefixIcon: Icon(Icons.lock, color: Color(0xFF0B5022)),

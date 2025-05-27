@@ -510,10 +510,30 @@ class _HomepageState extends State<Homepage> {
               .collection("bestClubsOptions")
               .snapshots(),
           builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator());
+            }
+            // Handle errors
+            if (snapshot.hasError) {
+              return Center(
+                child: Text(
+                  'حدث خطأ في تحميل البيانات',
+                  style: TextStyle(color: Colors.red),
+                ),
+              );
+            }
+
+            // Handle empty data
+            if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+              return Center(
+                child: Text(
+                  'لا توجد بيانات متاحة',
+                  style: TextStyle(color: Colors.grey),
+                ),
+              );
+            }
             final data = snapshot.data!.docs;
 
-            if (!snapshot.hasData)
-              return Center(child: CircularProgressIndicator());
             return SafeArea(
               child: Column(
                 children: [
@@ -983,57 +1003,69 @@ class _HomepageState extends State<Homepage> {
                       scrollDirection: Axis.horizontal,
                       itemCount: data.length,
                       itemBuilder: (context, index) {
-                        Uint8List bytes =
-                            base64Decode(data[index]["club_image"]);
-                        return Container(
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                          width: 180,
-                          height: 100,
-                          child: Card(
-                            color: Colors.grey,
-                            elevation: 5,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: ListTile(
-                              onTap: () {},
-                              title: Image.memory(
-                                bytes,
-                                width: 80,
-                                height: 80,
-                                fit: BoxFit.cover,
+                        try {
+                          Uint8List bytes =
+                              base64Decode(data[index]["club_image"]);
+                          return Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 5),
+                            width: 180,
+                            height: 100,
+                            child: Card(
+                              color: Colors.grey,
+                              elevation: 5,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
                               ),
-                              subtitle: Column(
-                                children: [
-                                  Text(
-                                    data[index]["club_name"],
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold,
-                                      color: Color(0xFF0B5022),
+                              child: ListTile(
+                                onTap: () {},
+                                title: Image.memory(
+                                  bytes,
+                                  width: 80,
+                                  height: 80,
+                                  fit: BoxFit.cover,
+                                ),
+                                subtitle: Column(
+                                  children: [
+                                    Text(
+                                      data[index]["club_name"],
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold,
+                                        color: Color(0xFF0B5022),
+                                      ),
                                     ),
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: List.generate(
-                                        5,
-                                        (i) => Icon(
-                                              Icons.star,
-                                              size: 20,
-                                              color: i <
-                                                      data[index]
-                                                          ["club_evaluation"]
-                                                  ? Color(0xFF0B5022)
-                                                  : Colors.white,
-                                            )),
-                                  ),
-                                ],
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: List.generate(
+                                          5,
+                                          (i) => Icon(
+                                                Icons.star,
+                                                size: 20,
+                                                color: i <
+                                                        data[index]
+                                                            ["club_evaluation"]
+                                                    ? Color(0xFF0B5022)
+                                                    : Colors.white,
+                                              )),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                        );
+                          );
+                        } catch (e) {
+                          return Container(
+                            width: 180,
+                            child: Card(
+                              child: Center(
+                                child: Text("خطأ في تحميل البيانات"),
+                              ),
+                            ),
+                          );
+                        }
                       },
                     ),
                   )
