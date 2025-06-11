@@ -135,6 +135,7 @@ class _ChatScreenState extends State<ChatScreenai> {
               color: Color(0xFF0B5022),
               fontWeight: FontWeight.bold,
               fontSize: 20,
+              fontFamily: "IBMPlexSansArabic",
             ),
           ),
           SizedBox(width: 20),
@@ -158,7 +159,11 @@ class _ChatScreenState extends State<ChatScreenai> {
                 child: Center(
                   child: Text(
                     'فشل تحميل صورة الخلفية',
-                    style: TextStyle(color: Colors.red, fontSize: 16),
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontSize: 16,
+                      fontFamily: "IBMPlexSansArabic",
+                    ),
                   ),
                 ),
               ),
@@ -195,6 +200,7 @@ class _ChatScreenState extends State<ChatScreenai> {
                                 style: TextStyle(
                                   color: Color(0xFF0B5022),
                                   fontStyle: FontStyle.italic,
+                                  fontFamily: "IBMPlexSansArabic",
                                 ),
                               ),
                             ],
@@ -232,6 +238,7 @@ class _ChatScreenState extends State<ChatScreenai> {
                               style: TextStyle(
                                 color: isUser ? Colors.white : Colors.black,
                                 fontSize: 16,
+                                fontFamily: "IBMPlexSansArabic",
                               ),
                             ),
                             SizedBox(height: 4),
@@ -240,6 +247,7 @@ class _ChatScreenState extends State<ChatScreenai> {
                               style: TextStyle(
                                 color: isUser ? Colors.white70 : Colors.black54,
                                 fontSize: 12,
+                                fontFamily: "IBMPlexSansArabic",
                               ),
                             ),
                           ],
@@ -259,7 +267,10 @@ class _ChatScreenState extends State<ChatScreenai> {
                         controller: _textController,
                         decoration: InputDecoration(
                           hintText: 'اكتب رسالتك...',
-                          hintStyle: TextStyle(color: Colors.black54),
+                          hintStyle: TextStyle(
+                            color: Colors.black54,
+                            fontFamily: "IBMPlexSansArabic",
+                          ),
                           filled: true,
                           fillColor: Colors.white,
                           border: OutlineInputBorder(

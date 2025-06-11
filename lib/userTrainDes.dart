@@ -16,6 +16,7 @@ class GymProfileViewScreen extends StatelessWidget {
     required this.priceMonthController,
     required this.price3MonthsController,
     required this.priceYearController,
+    required List facilities,
   });
 
   @override
@@ -36,7 +37,7 @@ class GymProfileViewScreen extends StatelessWidget {
               ClipRRect(
                 borderRadius: BorderRadius.circular(30),
                 child: Image.asset(
-                  'img/my.jpeg',
+                  'img/logo.png',
                   height: 400,
                   width: 400,
                   fit: BoxFit.cover,
@@ -47,10 +48,10 @@ class GymProfileViewScreen extends StatelessWidget {
               Text(
                 'نادي الوحدة لكمال اللأجسام',
                 style: TextStyle(
-                  fontSize: 25,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    fontFamily: "IBMPlexSansArabic"),
               ),
               SizedBox(height: 10),
               // أيقونات القلب والتعليق
@@ -144,7 +145,10 @@ class GymProfileViewScreen extends StatelessWidget {
         alignment: Alignment.centerRight,
         child: Text(
           title,
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+          style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 18,
+              fontFamily: "IBMPlexSansArabic"),
           textDirection: TextDirection.rtl,
         ),
       ),
@@ -165,7 +169,7 @@ class GymProfileViewScreen extends StatelessWidget {
           value.isEmpty ? label : value,
           textAlign: TextAlign.right,
           textDirection: TextDirection.rtl,
-          style: TextStyle(fontSize: 16),
+          style: TextStyle(fontSize: 16, fontFamily: "IBMPlexSansArabic"),
         ),
       ),
     );
@@ -174,7 +178,9 @@ class GymProfileViewScreen extends StatelessWidget {
   Widget subscriptionBox(String label, String value, Color color) {
     return Column(
       children: [
-        Text(label, style: TextStyle(fontWeight: FontWeight.bold)),
+        Text(label,
+            style: TextStyle(
+                fontWeight: FontWeight.bold, fontFamily: "IBMPlexSansArabic")),
         SizedBox(height: 5),
         Container(
           decoration: BoxDecoration(
@@ -187,9 +193,9 @@ class GymProfileViewScreen extends StatelessWidget {
             child: Text(
               value.isEmpty ? "JD" : value,
               style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-              ),
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: "IBMPlexSansArabic"),
               textAlign: TextAlign.center,
             ),
           ),

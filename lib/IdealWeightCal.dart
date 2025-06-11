@@ -132,9 +132,11 @@ class _IdealWeightCalculatorState extends State<IdealWeightCalculator> {
                                   child: Text(
                                     value == 'male' ? 'ذكر' : 'أنثى',
                                     style: TextStyle(
-                                        color: Color(0xFF0B5022),
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold),
+                                      color: Color(0xFF0B5022),
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: "IBMPlexSansArabic",
+                                    ),
                                     textAlign: TextAlign.start,
                                   ),
                                 );

@@ -74,6 +74,7 @@ class _Healthypage extends State<Healthypage> {
                     style: TextStyle(
                         fontSize: 28,
                         color: Colors.black,
+                        fontFamily: "IBMPlexSansArabic",
                         shadows: [
                           Shadow(
                               color: Colors.black,
@@ -162,6 +163,7 @@ class _Healthypage extends State<Healthypage> {
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
                           color: Color(0xFF0B5022),
+                          fontFamily: "IBMPlexSansArabic",
                           shadows: [
                             Shadow(
                                 color: Color(0xFF0B5022),
@@ -187,6 +189,7 @@ class _Healthypage extends State<Healthypage> {
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
                           color: Color(0xFF0B5022),
+                          fontFamily: "IBMPlexSansArabic",
                           shadows: [
                             Shadow(
                                 color: Color(0xFF0B5022),
@@ -228,8 +231,14 @@ class _Healthypage extends State<Healthypage> {
               },
               calendarStyle: CalendarStyle(
                 outsideDaysVisible: false,
-                weekendTextStyle: TextStyle(color: Colors.black),
-                defaultTextStyle: TextStyle(color: Colors.black),
+                weekendTextStyle: TextStyle(
+                  color: Colors.black,
+                  fontFamily: "IBMPlexSansArabic",
+                ),
+                defaultTextStyle: TextStyle(
+                  color: Colors.black,
+                  fontFamily: "IBMPlexSansArabic",
+                ),
                 todayDecoration: BoxDecoration(
                   color: Color(0xFF0B5022).withOpacity(0.5),
                   shape: BoxShape.circle,
@@ -242,11 +251,21 @@ class _Healthypage extends State<Healthypage> {
               headerStyle: HeaderStyle(
                 formatButtonVisible: false,
                 titleCentered: true,
-                titleTextStyle: TextStyle(fontSize: 18, color: Colors.black),
+                titleTextStyle: TextStyle(
+                  fontSize: 18,
+                  color: Colors.black,
+                  fontFamily: "IBMPlexSansArabic",
+                ),
               ),
               daysOfWeekStyle: DaysOfWeekStyle(
-                weekdayStyle: TextStyle(color: Colors.black),
-                weekendStyle: TextStyle(color: Colors.black),
+                weekdayStyle: TextStyle(
+                  color: Colors.black,
+                  fontFamily: "IBMPlexSansArabic",
+                ),
+                weekendStyle: TextStyle(
+                  color: Colors.black,
+                  fontFamily: "IBMPlexSansArabic",
+                ),
               ),
             ),
             SizedBox(height: 10),
@@ -276,7 +295,10 @@ class _Healthypage extends State<Healthypage> {
                       ),
                       child: Text(
                         'حفظ الخطة',
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontFamily: "IBMPlexSansArabic",
+                        ),
                       ),
                     ),
                     if (_dailyPlans[_selectedDay] != null)
@@ -287,10 +309,12 @@ class _Healthypage extends State<Healthypage> {
                             Text(
                               ' الهدف:',
                               style: TextStyle(
-                                  backgroundColor: Colors.black,
-                                  fontSize: 24,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold),
+                                backgroundColor: Colors.black,
+                                fontSize: 24,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: "IBMPlexSansArabic",
+                              ),
                               textDirection: TextDirection.rtl,
                             ),
                             SizedBox(
@@ -301,6 +325,7 @@ class _Healthypage extends State<Healthypage> {
                               style: TextStyle(
                                 fontSize: 24,
                                 color: Colors.black,
+                                fontFamily: "IBMPlexSansArabic",
                               ),
                               textDirection: TextDirection.rtl,
                             ),

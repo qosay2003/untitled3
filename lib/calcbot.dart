@@ -318,7 +318,10 @@ class _CalorieCalculatorScreenState extends State<CalorieCalculatorScreen> {
       return ListTile(
         title: Text(
           "${arabicNames[entry.key] ?? entry.key} : ${entry.value!.toStringAsFixed(2)} $unit",
-          style: const TextStyle(fontSize: 18),
+          style: const TextStyle(
+            fontSize: 18,
+            fontFamily: "IBMPlexSansArabic",
+          ),
         ),
       );
     }).toList();
@@ -334,7 +337,11 @@ class _CalorieCalculatorScreenState extends State<CalorieCalculatorScreen> {
           actions: [
             Text(
               "حاسبة السعرات الحرارية",
-              style: TextStyle(color: Colors.white, fontSize: 20),
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+                fontFamily: "IBMPlexSansArabic",
+              ),
             ),
             SizedBox(
               width: 40,
@@ -398,7 +405,11 @@ class _CalorieCalculatorScreenState extends State<CalorieCalculatorScreen> {
                   ),
                 ),
                 child: const Text("ابحث",
-                    style: TextStyle(fontSize: 16, color: Colors.white)),
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.white,
+                      fontFamily: "IBMPlexSansArabic",
+                    )),
               ),
               const SizedBox(height: 20),
               if (loading) const Center(child: CircularProgressIndicator()),
@@ -414,7 +425,10 @@ class _CalorieCalculatorScreenState extends State<CalorieCalculatorScreen> {
                             "الطعام: ${result!["name"]}",
                             textAlign: TextAlign.right,
                             style: const TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold),
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: "IBMPlexSansArabic",
+                            ),
                           ),
                         ),
                         const Divider(),
@@ -423,7 +437,10 @@ class _CalorieCalculatorScreenState extends State<CalorieCalculatorScreen> {
                             "\u202B📊 القيم الغذائية لكل 100 جم:\u202C",
                             textAlign: TextAlign.right,
                             style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold),
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: "IBMPlexSansArabic",
+                            ),
                           ),
                         ),
                         ..._buildNutrientList(result!["baseNutrients"]),
@@ -434,7 +451,10 @@ class _CalorieCalculatorScreenState extends State<CalorieCalculatorScreen> {
                               "\u202B📊 القيم الغذائية لـ ${result!["weight"]} جم:\u202C",
                               textAlign: TextAlign.right,
                               style: const TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.bold),
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: "IBMPlexSansArabic",
+                              ),
                             ),
                           ),
                           ..._buildNutrientList(result!["nutrients"]),
@@ -448,6 +468,7 @@ class _CalorieCalculatorScreenState extends State<CalorieCalculatorScreen> {
                               fontSize: 14,
                               color: Color.fromARGB(255, 20, 77, 128),
                               fontStyle: FontStyle.italic,
+                              fontFamily: "IBMPlexSansArabic",
                             ),
                           ),
                         ),
@@ -464,6 +485,7 @@ class _CalorieCalculatorScreenState extends State<CalorieCalculatorScreen> {
                     style: const TextStyle(
                       color: Colors.red,
                       fontSize: 16,
+                      fontFamily: "IBMPlexSansArabic",
                     ),
                   ),
                 ),

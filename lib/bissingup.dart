@@ -72,7 +72,11 @@ class _BissingupState extends State<Bissingup> {
   Future<void> uploadData() async {
     if (idImage == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('الرجاء اختيار صورة الهوية')),
+        SnackBar(
+            content: Text(
+          'الرجاء اختيار صورة الهوية',
+          style: TextStyle(fontFamily: "IBMPlexSansArabic"),
+        )),
       );
       return;
     }
@@ -82,7 +86,13 @@ class _BissingupState extends State<Bissingup> {
 
       if (base64Image == null) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('حدث خطأ في معالجة الصورة')),
+          SnackBar(
+              content: Text(
+            'حدث خطأ في معالجة الصورة',
+            style: TextStyle(
+              fontFamily: "IBMPlexSansArabic",
+            ),
+          )),
         );
         return;
       }
@@ -110,7 +120,13 @@ class _BissingupState extends State<Bissingup> {
     } catch (e) {
       print("Error creating account: $e");
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('حدث خطأ: ${e.toString()}')),
+        SnackBar(
+            content: Text(
+          'حدث خطأ: ${e.toString()}',
+          style: TextStyle(
+            fontFamily: "IBMPlexSansArabic",
+          ),
+        )),
       );
     }
   }
@@ -194,8 +210,8 @@ class _BissingupState extends State<Bissingup> {
                       ],
                     ),
                     buildDropdown('الجنس', ['ذكر', 'أنثى']),
-                    buildImagePicker('صورة الهوية المدنية',
-                        'أرفع صورة عن الهوية المدنية من الأدام'),
+                    buildImagePicker(
+                        'صورة الهوية المدنية', 'أرفع صورة عن الهوية المدنية  '),
                     buildFieldWithIcon(
                       'كلمة السر',
                       'أدخل كلمة السر',
@@ -222,8 +238,11 @@ class _BissingupState extends State<Bissingup> {
                         ),
                         child: Text(
                           'إنشاء الحساب',
-                          style:
-                              TextStyle(color: backgroundColor, fontSize: 18),
+                          style: TextStyle(
+                            color: backgroundColor,
+                            fontSize: 18,
+                            fontFamily: "IBMPlexSansArabic",
+                          ),
                         ),
                       ),
                     ),
@@ -249,17 +268,28 @@ class _BissingupState extends State<Bissingup> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          Text(label, style: TextStyle(color: Colors.white, fontSize: 16)),
+          Text(label,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontFamily: "IBMPlexSansArabic",
+              )),
           const SizedBox(height: 5),
           TextField(
             controller: controller,
             obscureText: obscure,
             textAlign: TextAlign.right,
             textDirection: TextDirection.rtl,
-            style: TextStyle(fontSize: 16),
+            style: TextStyle(
+              fontSize: 16,
+              fontFamily: "IBMPlexSansArabic",
+            ),
             decoration: InputDecoration(
               hintText: hint,
-              hintStyle: TextStyle(fontSize: 16),
+              hintStyle: TextStyle(
+                fontSize: 16,
+                fontFamily: "IBMPlexSansArabic",
+              ),
               filled: true,
               fillColor: Colors.white,
               contentPadding:
@@ -283,17 +313,28 @@ class _BissingupState extends State<Bissingup> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          Text(label, style: TextStyle(color: Colors.white, fontSize: 16)),
+          Text(label,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontFamily: "IBMPlexSansArabic",
+              )),
           const SizedBox(height: 5),
           TextField(
             controller: controller,
             obscureText: obscure,
             textAlign: TextAlign.right,
             textDirection: TextDirection.rtl,
-            style: TextStyle(fontSize: 16),
+            style: TextStyle(
+              fontSize: 16,
+              fontFamily: "IBMPlexSansArabic",
+            ),
             decoration: InputDecoration(
               hintText: hint,
-              hintStyle: TextStyle(fontSize: 16),
+              hintStyle: TextStyle(
+                fontSize: 16,
+                fontFamily: "IBMPlexSansArabic",
+              ),
               filled: true,
               fillColor: Colors.white,
               suffixIcon: Icon(icon),
@@ -317,7 +358,12 @@ class _BissingupState extends State<Bissingup> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          Text(label, style: TextStyle(color: Colors.white, fontSize: 16)),
+          Text(label,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontFamily: "IBMPlexSansArabic",
+              )),
           const SizedBox(height: 5),
           DropdownButtonFormField<String>(
             decoration: InputDecoration(
@@ -330,14 +376,26 @@ class _BissingupState extends State<Bissingup> {
                 borderSide: BorderSide.none,
               ),
             ),
-            hint: Text('اختر $label', textDirection: TextDirection.rtl),
+            hint: Text(
+              'اختر $label',
+              textDirection: TextDirection.rtl,
+              style: TextStyle(
+                fontFamily: "IBMPlexSansArabic",
+              ),
+            ),
             items: items.map((Map<String, dynamic> item) {
               return DropdownMenuItem<String>(
                 value: item['label'],
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Text(item['label'], textDirection: TextDirection.rtl),
+                    Text(
+                      item['label'],
+                      textDirection: TextDirection.rtl,
+                      style: TextStyle(
+                        fontFamily: "IBMPlexSansArabic",
+                      ),
+                    ),
                     SizedBox(width: 10),
                     Image.asset(
                       item['image'],
@@ -365,7 +423,12 @@ class _BissingupState extends State<Bissingup> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          Text(label, style: TextStyle(color: Colors.white, fontSize: 16)),
+          Text(label,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontFamily: "IBMPlexSansArabic",
+              )),
           const SizedBox(height: 5),
           DropdownButtonFormField<String>(
             decoration: InputDecoration(
@@ -378,11 +441,23 @@ class _BissingupState extends State<Bissingup> {
                 borderSide: BorderSide.none,
               ),
             ),
-            hint: Text('اختر $label', textDirection: TextDirection.rtl),
+            hint: Text(
+              'اختر $label',
+              textDirection: TextDirection.rtl,
+              style: TextStyle(
+                fontFamily: "IBMPlexSansArabic",
+              ),
+            ),
             items: items.map((String value) {
               return DropdownMenuItem<String>(
                 value: value,
-                child: Text(value, textDirection: TextDirection.rtl),
+                child: Text(
+                  value,
+                  textDirection: TextDirection.rtl,
+                  style: TextStyle(
+                    fontFamily: "IBMPlexSansArabic",
+                  ),
+                ),
               );
             }).toList(),
             onChanged: (value) {
@@ -400,7 +475,12 @@ class _BissingupState extends State<Bissingup> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          Text(label, style: TextStyle(color: Colors.white, fontSize: 16)),
+          Text(label,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontFamily: "IBMPlexSansArabic",
+              )),
           const SizedBox(height: 5),
           Container(
             height: 50,
@@ -417,14 +497,29 @@ class _BissingupState extends State<Bissingup> {
                       context: context,
                       builder: (context) {
                         return AlertDialog(
-                          title: Text("اختيار طريقه تحميل الصوره "),
+                          title: Text(
+                            "اختيار طريقه تحميل الصوره ",
+                            style: TextStyle(
+                              fontFamily: "IBMPlexSansArabic",
+                            ),
+                          ),
                           actions: [
                             TextButton(
                                 onPressed: pickImageSelectFromGallery,
-                                child: Text("من المعرض")),
+                                child: Text(
+                                  "من المعرض",
+                                  style: TextStyle(
+                                    fontFamily: "IBMPlexSansArabic",
+                                  ),
+                                )),
                             TextButton(
                                 onPressed: pickImageSelectFromCamera,
-                                child: Text("بأستخدام الكاميرا")),
+                                child: Text(
+                                  "بأستخدام الكاميرا",
+                                  style: TextStyle(
+                                    fontFamily: "IBMPlexSansArabic",
+                                  ),
+                                )),
                           ],
                         );
                       },
@@ -435,7 +530,10 @@ class _BissingupState extends State<Bissingup> {
                   child: Text(
                     hint,
                     textAlign: TextAlign.right,
-                    style: TextStyle(fontSize: 16),
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontFamily: "IBMPlexSansArabic",
+                    ),
                   ),
                 ),
               ],

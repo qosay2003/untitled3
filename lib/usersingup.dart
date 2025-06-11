@@ -45,7 +45,10 @@ class Usersingup extends StatelessWidget {
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-              content: Text('Error signing in with Google: ${e.toString()}')),
+              content: Text(
+            'Error signing in with Google: ${e.toString()}',
+            style: TextStyle(fontFamily: "IBMPlexSansArabic"),
+          )),
         );
       }
     }
@@ -95,9 +98,10 @@ class Usersingup extends StatelessWidget {
                     Text(
                       'الاسم',
                       style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20, // حجم خط التسمية
-                      ),
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontFamily: "IBMPlexSansArabic" // حجم خط التسمية
+                          ),
                     ),
                     const SizedBox(height: 5),
                     TextField(
@@ -106,7 +110,8 @@ class Usersingup extends StatelessWidget {
                       style: TextStyle(fontSize: 20),
                       decoration: InputDecoration(
                         hintText: 'ادخل اسمك',
-                        hintStyle: TextStyle(fontSize: 20),
+                        hintStyle: TextStyle(
+                            fontSize: 20, fontFamily: "IBMPlexSansArabic"),
                         filled: true,
                         fillColor: Colors.white,
                         contentPadding:
@@ -130,16 +135,21 @@ class Usersingup extends StatelessWidget {
                   children: [
                     Text(
                       'البريد الإلكتروني',
-                      style: TextStyle(color: Colors.white, fontSize: 20),
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontFamily: "IBMPlexSansArabic"),
                     ),
                     const SizedBox(height: 5),
                     TextField(
                       controller: email,
                       textAlign: TextAlign.right,
-                      style: TextStyle(fontSize: 16),
+                      style: TextStyle(
+                          fontSize: 16, fontFamily: "IBMPlexSansArabic"),
                       decoration: InputDecoration(
                         hintText: 'ادخل بريدك الالكتروني',
-                        hintStyle: TextStyle(fontSize: 20),
+                        hintStyle: TextStyle(
+                            fontSize: 20, fontFamily: "IBMPlexSansArabic"),
                         filled: true,
                         fillColor: Colors.white,
                         contentPadding:
@@ -163,17 +173,22 @@ class Usersingup extends StatelessWidget {
                   children: [
                     Text(
                       'كلمة السر',
-                      style: TextStyle(color: Colors.white, fontSize: 20),
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontFamily: "IBMPlexSansArabic"),
                     ),
                     const SizedBox(height: 5),
                     TextField(
                       controller: password,
                       obscureText: true,
                       textAlign: TextAlign.right,
-                      style: TextStyle(fontSize: 16),
+                      style: TextStyle(
+                          fontSize: 16, fontFamily: "IBMPlexSansArabic"),
                       decoration: InputDecoration(
                         hintText: 'ادخل كلمة السر',
-                        hintStyle: TextStyle(fontSize: 16),
+                        hintStyle: TextStyle(
+                            fontSize: 16, fontFamily: "IBMPlexSansArabic"),
                         filled: true,
                         fillColor: Colors.white,
                         contentPadding:
@@ -197,17 +212,22 @@ class Usersingup extends StatelessWidget {
                   children: [
                     Text(
                       'تأكيد كلمة السر',
-                      style: TextStyle(color: Colors.white, fontSize: 18),
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontFamily: "IBMPlexSansArabic"),
                     ),
                     const SizedBox(height: 5),
                     TextField(
                       controller: confirm_password,
                       obscureText: true,
                       textAlign: TextAlign.right,
-                      style: TextStyle(fontSize: 20),
+                      style: TextStyle(
+                          fontSize: 20, fontFamily: "IBMPlexSansArabic"),
                       decoration: InputDecoration(
                         hintText: 'ادخل كلمة السر مرة أخرى',
-                        hintStyle: TextStyle(fontSize: 16),
+                        hintStyle: TextStyle(
+                            fontSize: 16, fontFamily: "IBMPlexSansArabic"),
                         filled: true,
                         fillColor: Colors.white,
                         contentPadding:
@@ -265,9 +285,9 @@ class Usersingup extends StatelessWidget {
                     child: const Text(
                       'دخول',
                       style: TextStyle(
-                        color: Color(0xFF0B5022),
-                        fontSize: 24,
-                      ),
+                          color: Color(0xFF0B5022),
+                          fontSize: 24,
+                          fontFamily: "IBMPlexSansArabic"),
                     ),
                   ),
                 ),
@@ -280,7 +300,8 @@ class Usersingup extends StatelessWidget {
                 style: TextStyle(
                     color: Colors.white,
                     fontSize: 20,
-                    fontWeight: FontWeight.bold),
+                    fontWeight: FontWeight.bold,
+                    fontFamily: "IBMPlexSansArabic"),
               ),
 
               const SizedBox(height: 10),
@@ -312,7 +333,9 @@ class Usersingup extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          Text(label, style: const TextStyle(color: Colors.white)),
+          Text(label,
+              style: const TextStyle(
+                  color: Colors.white, fontFamily: "IBMPlexSansArabic")),
           const SizedBox(height: 5),
           TextField(
             obscureText: obscure,

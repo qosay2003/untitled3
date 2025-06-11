@@ -87,7 +87,10 @@ class forgetpass3 extends StatelessWidget {
                     filled: true,
                     fillColor: Colors.white,
                     hintText: 'ادخل كلمة المرور',
-                    hintStyle: TextStyle(color: Colors.grey),
+                    hintStyle: TextStyle(
+                      color: Colors.grey,
+                      fontFamily: "IBMPlexSansArabic",
+                    ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20),
                       borderSide: BorderSide.none,
@@ -127,7 +130,10 @@ class forgetpass3 extends StatelessWidget {
                     filled: true,
                     fillColor: Colors.white,
                     hintText: '  ادخل كلمه المرور مره اخرى',
-                    hintStyle: TextStyle(color: Colors.grey),
+                    hintStyle: TextStyle(
+                      color: Colors.grey,
+                      fontFamily: "IBMPlexSansArabic",
+                    ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20),
                       borderSide: BorderSide.none,
@@ -155,7 +161,13 @@ class forgetpass3 extends StatelessWidget {
                             builder: (context) => mainlogin()));
                       } on Exception catch (e) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('خطأ: ${e.toString()}')),
+                          SnackBar(
+                              content: Text(
+                            'خطأ: ${e.toString()}',
+                            style: TextStyle(
+                              fontFamily: "IBMPlexSansArabic",
+                            ),
+                          )),
                         );
                       }
                     }

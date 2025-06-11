@@ -74,7 +74,11 @@ class _OTPScreenState extends State<OTPScreen> {
                     // النص التوضيحي
                     Text(
                       'لقد أرسلنا لك الكود على الإيميل email@gmail.com\nأدخل رمز التفعيل هنا',
-                      style: TextStyle(fontSize: 16, color: Colors.white70),
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.white70,
+                        fontFamily: "IBMPlexSansArabic",
+                      ),
                       textAlign: TextAlign.center,
                       textDirection: TextDirection.rtl,
                     ),
@@ -93,7 +97,10 @@ class _OTPScreenState extends State<OTPScreen> {
                               keyboardType: TextInputType.number,
                               maxLength: 1,
                               style: TextStyle(
-                                  color: Color(0xFF0B5022), fontSize: 20),
+                                color: Color(0xFF0B5022),
+                                fontSize: 20,
+                                fontFamily: "IBMPlexSansArabic",
+                              ),
                               decoration: InputDecoration(
                                 counterText: '', // إخفاء عداد الأحرف
                                 filled: true,
@@ -141,7 +148,11 @@ class _OTPScreenState extends State<OTPScreen> {
                     ),
                     Text(
                       'أعد الإرسال بعد $_secondsRemaining ثانية',
-                      style: TextStyle(fontSize: 16, color: Colors.white70),
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.white70,
+                        fontFamily: "IBMPlexSansArabic",
+                      ),
                       textAlign: TextAlign.center,
                       textDirection: TextDirection.rtl,
                     ),

@@ -5,53 +5,6 @@ import 'package:untitled3/usersingup.dart';
 import 'package:untitled3/TrainersSingup.dart';
 
 // صفحات وهمية لكل دور (يمكنك استبدالها بصفحاتك الفعلية)
-class EmployerPage extends StatelessWidget {
-  const EmployerPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('صفحة صاحب العمل')),
-      body: const Center(child: Text('مرحبًا بصاحب العمل!')),
-    );
-  }
-}
-
-class UserPage extends StatelessWidget {
-  const UserPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('صفحة المستخدم')),
-      body: const Center(child: Text('مرحبًا بالمستخدم!')),
-    );
-  }
-}
-
-class TrainerPage extends StatelessWidget {
-  const TrainerPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('صفحة أخصائي التغذية/المدرب')),
-      body: const Center(child: Text('مرحبًا بالأخصائي!')),
-    );
-  }
-}
-
-class StorePage extends StatelessWidget {
-  const StorePage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('صفحة المتجر الإلكتروني')),
-      body: const Center(child: Text('مرحبًا بالمتجر!')),
-    );
-  }
-}
 
 class choosesingup extends StatelessWidget {
   const choosesingup({super.key});
@@ -62,7 +15,6 @@ class choosesingup extends StatelessWidget {
       {'title': 'صاحب عمل', 'icon': FontAwesomeIcons.userTie},
       {'title': 'مستخدم', 'icon': FontAwesomeIcons.user},
       {'title': 'اخصائي تغذية/مدرب شخصي', 'icon': FontAwesomeIcons.dumbbell},
-      {'title': 'مسؤول', 'icon': Icons.admin_panel_settings},
     ];
 
     // قائمة الصفحات المرتبطة بكل دور
@@ -70,7 +22,7 @@ class choosesingup extends StatelessWidget {
       Bissingup(), //بزنس
       Usersingup(), //مستخدم
       trainerssingup(), // مدربين
-      StorePage(), //متاجر
+      //متاجر
     ];
 
     return Scaffold(
@@ -140,6 +92,7 @@ class choosesingup extends StatelessWidget {
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: 16,
+                          fontFamily: "IBMPlexSansArabic",
                         ),
                       ),
                     ],

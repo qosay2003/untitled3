@@ -69,7 +69,10 @@ class _LoginScreenState extends State<mainlogin> {
                           color: Color(0xFF0B5022),
                         ),
                         hintText: 'Email@gmail.com',
-                        hintStyle: TextStyle(color: Colors.grey),
+                        hintStyle: TextStyle(
+                          color: Colors.grey,
+                          fontFamily: "IBMPlexSansArabic",
+                        ),
                         filled: true,
                         fillColor: Colors.white,
                         border: OutlineInputBorder(
@@ -88,8 +91,8 @@ class _LoginScreenState extends State<mainlogin> {
                         suffixIcon: IconButton(
                           icon: Icon(
                             _obscureText
-                                ? Icons.visibility
-                                : Icons.visibility_off,
+                                ? Icons.visibility_off
+                                : Icons.visibility,
                             color: Color(0xFF0B5022),
                           ),
                           onPressed: () {
@@ -99,7 +102,10 @@ class _LoginScreenState extends State<mainlogin> {
                           },
                         ),
                         hintText: '********',
-                        hintStyle: TextStyle(color: Colors.grey),
+                        hintStyle: TextStyle(
+                          color: Colors.grey,
+                          fontFamily: "IBMPlexSansArabic",
+                        ),
                         filled: true,
                         fillColor: Colors.white,
                         border: OutlineInputBorder(
@@ -135,7 +141,13 @@ class _LoginScreenState extends State<mainlogin> {
                           Navigator.pushNamed(context, "homepage");
                         } on Exception catch (e) {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('خطأ: ${e.toString()}')),
+                            SnackBar(
+                                content: Text(
+                              'خطأ: ${e.toString()}',
+                              style: TextStyle(
+                                fontFamily: "IBMPlexSansArabic",
+                              ),
+                            )),
                           );
                         }
                       },

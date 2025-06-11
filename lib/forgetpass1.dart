@@ -81,7 +81,10 @@ class forgetpass1 extends StatelessWidget {
                   filled: true,
                   fillColor: Colors.white,
                   hintText: 'ادخل البريد الإلكتروني',
-                  hintStyle: TextStyle(color: Colors.grey),
+                  hintStyle: TextStyle(
+                    color: Colors.grey,
+                    fontFamily: "IBMPlexSansArabic",
+                  ),
                   suffixIcon: Icon(
                     Icons.person,
                     color: Color(0xFF0B5022),
@@ -105,7 +108,13 @@ class forgetpass1 extends StatelessWidget {
                     Navigator.pushNamed(context, 'mlogin');
                   } on Exception catch (e) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('خطأ: ${e.toString()}')),
+                      SnackBar(
+                          content: Text(
+                        'خطأ: ${e.toString()}',
+                        style: TextStyle(
+                          fontFamily: "IBMPlexSansArabic",
+                        ),
+                      )),
                     );
                   }
 

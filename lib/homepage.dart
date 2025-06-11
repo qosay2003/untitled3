@@ -6,11 +6,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:untitled3/ClubsandCoachesPage.dart';
 import 'package:untitled3/Placesscreen.dart';
+import 'package:untitled3/TrainersDescriptionScreen.dart';
 import 'package:untitled3/calcbot.dart';
 import 'package:untitled3/chatuserlist.dart';
 import 'package:untitled3/forgetpass3.dart';
 import 'package:untitled3/healthypage.dart';
+import 'package:untitled3/subscribeUser.dart';
 import 'package:untitled3/userTrainDes.dart';
 import 'package:untitled3/chatAI.dart';
 
@@ -224,6 +227,7 @@ class _HomepageState extends State<Homepage> {
                               color: Colors.white,
                               fontSize: 10,
                               fontWeight: FontWeight.bold,
+                              fontFamily: "IBMPlexSansArabic",
                             ),
                             textAlign: TextAlign.center,
                           ),
@@ -259,6 +263,7 @@ class _HomepageState extends State<Homepage> {
                   FirebaseAuth.instance.currentUser?.displayName.toString() ??
                       "user",
                   style: TextStyle(
+                    fontFamily: "IBMPlexSansArabic",
                     shadows: [
                       Shadow(
                           color: Color(0xFF0B5022),
@@ -291,7 +296,7 @@ class _HomepageState extends State<Homepage> {
                       );
                     } else {
                       return Image.asset(
-                        "img/my.jpeg",
+                        "img/logo.png",
                         fit: BoxFit.cover,
                       );
                     }
@@ -323,6 +328,7 @@ class _HomepageState extends State<Homepage> {
                         style: TextStyle(
                           color: Color(0xFF0B5022),
                           fontSize: 24,
+                          fontFamily: "IBMPlexSansArabic",
                         ),
                       ),
                     ),
@@ -340,6 +346,7 @@ class _HomepageState extends State<Homepage> {
                                 color: Color(0xFF0B5022),
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
+                                fontFamily: "IBMPlexSansArabic",
                               ),
                               textAlign: TextAlign.end,
                             ),
@@ -349,6 +356,7 @@ class _HomepageState extends State<Homepage> {
                               style: TextStyle(
                                 color: Color(0xFF0B5022),
                                 fontSize: 14,
+                                fontFamily: "IBMPlexSansArabic",
                               ),
                               textAlign: TextAlign.end,
                             ),
@@ -374,7 +382,7 @@ class _HomepageState extends State<Homepage> {
                                   );
                                 } else {
                                   return Image.asset(
-                                    "img/my.jpeg",
+                                    "img/logo.png",
                                     fit: BoxFit.cover,
                                   );
                                 }
@@ -395,6 +403,9 @@ class _HomepageState extends State<Homepage> {
                 title: Text(
                   'الرئيسية',
                   textAlign: TextAlign.end,
+                  style: TextStyle(
+                    fontFamily: "IBMPlexSansArabic",
+                  ),
                 ),
                 onTap: () {
                   Navigator.pop(context);
@@ -408,20 +419,38 @@ class _HomepageState extends State<Homepage> {
                 title: Text(
                   'تغيير الصوره',
                   textAlign: TextAlign.end,
+                  style: TextStyle(
+                    fontFamily: "IBMPlexSansArabic",
+                  ),
                 ),
                 onTap: () {
                   showDialog(
                     context: context,
                     builder: (context) {
                       return AlertDialog(
-                        title: Text("اختيار طريقه تحميل الصوره "),
+                        title: Text(
+                          "اختيار طريقه تحميل الصوره ",
+                          style: TextStyle(
+                            fontFamily: "IBMPlexSansArabic",
+                          ),
+                        ),
                         actions: [
                           TextButton(
                               onPressed: pickImageSelectFromGallery,
-                              child: Text("من المعرض")),
+                              child: Text(
+                                "من المعرض",
+                                style: TextStyle(
+                                  fontFamily: "IBMPlexSansArabic",
+                                ),
+                              )),
                           TextButton(
                               onPressed: pickImageSelectFromCamera,
-                              child: Text("بأستخدام الكاميرا")),
+                              child: Text(
+                                "بأستخدام الكاميرا",
+                                style: TextStyle(
+                                  fontFamily: "IBMPlexSansArabic",
+                                ),
+                              )),
                         ],
                       );
                     },
@@ -436,6 +465,9 @@ class _HomepageState extends State<Homepage> {
                 title: Text(
                   'تغيير كلمه السر',
                   textAlign: TextAlign.end,
+                  style: TextStyle(
+                    fontFamily: "IBMPlexSansArabic",
+                  ),
                 ),
                 onTap: () {
                   Navigator.of(context).push(
@@ -450,6 +482,9 @@ class _HomepageState extends State<Homepage> {
                 title: Text(
                   'تغيير الاسم',
                   textAlign: TextAlign.end,
+                  style: TextStyle(
+                    fontFamily: "IBMPlexSansArabic",
+                  ),
                 ),
                 onTap: () {
                   Navigator.pop(context);
@@ -457,15 +492,36 @@ class _HomepageState extends State<Homepage> {
               ),
               ListTile(
                 trailing: Icon(
-                  Icons.settings,
+                  Icons.manage_accounts,
                   color: Color(0xFF0B5022),
                 ),
                 title: Text(
-                  'الإعدادات',
+                  ' ادارة صفحتي',
                   textAlign: TextAlign.end,
+                  style: TextStyle(
+                    fontFamily: "IBMPlexSansArabic",
+                  ),
                 ),
                 onTap: () {
-                  Navigator.pop(context);
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => GymProfileScreen()));
+                },
+              ),
+              ListTile(
+                trailing: Icon(
+                  Icons.add_home_work_outlined,
+                  color: Color(0xFF0B5022),
+                ),
+                title: Text(
+                  '  إشتراكاتي ',
+                  textAlign: TextAlign.end,
+                  style: TextStyle(
+                    fontFamily: "IBMPlexSansArabic",
+                  ),
+                ),
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => SubscriptionsScreen()));
                 },
               ),
             ],
@@ -483,8 +539,11 @@ class _HomepageState extends State<Homepage> {
               backgroundColor: Color(0xFF0B5022),
               child: Text(
                 "AI Chat",
-                style:
-                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: "IBMPlexSansArabic",
+                ),
               ),
             ),
             if (totalUnreadCount > 0)
@@ -518,7 +577,10 @@ class _HomepageState extends State<Homepage> {
               return Center(
                 child: Text(
                   'حدث خطأ في تحميل البيانات',
-                  style: TextStyle(color: Colors.red),
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontFamily: "IBMPlexSansArabic",
+                  ),
                 ),
               );
             }
@@ -528,7 +590,10 @@ class _HomepageState extends State<Homepage> {
               return Center(
                 child: Text(
                   'لا توجد بيانات متاحة',
-                  style: TextStyle(color: Colors.grey),
+                  style: TextStyle(
+                    color: Colors.grey,
+                    fontFamily: "IBMPlexSansArabic",
+                  ),
                 ),
               );
             }
@@ -547,6 +612,7 @@ class _HomepageState extends State<Homepage> {
                           style: TextStyle(
                               fontSize: 28,
                               color: Colors.black,
+                              fontFamily: "IBMPlexSansArabic",
                               shadows: [
                                 Shadow(
                                     color: Colors.black,
@@ -636,6 +702,7 @@ class _HomepageState extends State<Homepage> {
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
                                 color: Color(0xFF0B5022),
+                                fontFamily: "IBMPlexSansArabic",
                                 shadows: [
                                   Shadow(
                                       color: Color(0xFF0B5022),
@@ -661,6 +728,7 @@ class _HomepageState extends State<Homepage> {
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
                                 color: Color(0xFF0B5022),
+                                fontFamily: "IBMPlexSansArabic",
                                 shadows: [
                                   Shadow(
                                       color: Color(0xFF0B5022),
@@ -689,6 +757,7 @@ class _HomepageState extends State<Homepage> {
                           style: TextStyle(
                               fontSize: 28,
                               color: Colors.black,
+                              fontFamily: "IBMPlexSansArabic",
                               shadows: [
                                 Shadow(
                                     color: Colors.black,
@@ -834,6 +903,7 @@ class _HomepageState extends State<Homepage> {
                                 fontSize: 12,
                                 fontWeight: FontWeight.bold,
                                 color: Color(0xFF0B5022),
+                                fontFamily: "IBMPlexSansArabic",
                                 shadows: [
                                   Shadow(
                                       color: Color(0xFF0B5022),
@@ -860,6 +930,7 @@ class _HomepageState extends State<Homepage> {
                                 fontSize: 12,
                                 fontWeight: FontWeight.bold,
                                 color: Color(0xFF0B5022),
+                                fontFamily: "IBMPlexSansArabic",
                                 shadows: [
                                   Shadow(
                                       color: Color(0xFF0B5022),
@@ -885,6 +956,7 @@ class _HomepageState extends State<Homepage> {
                                 fontSize: 12,
                                 fontWeight: FontWeight.bold,
                                 color: Color(0xFF0B5022),
+                                fontFamily: "IBMPlexSansArabic",
                                 shadows: [
                                   Shadow(
                                       color: Color(0xFF0B5022),
@@ -910,6 +982,7 @@ class _HomepageState extends State<Homepage> {
                                 fontSize: 12,
                                 fontWeight: FontWeight.bold,
                                 color: Color(0xFF0B5022),
+                                fontFamily: "IBMPlexSansArabic",
                                 shadows: [
                                   Shadow(
                                       color: Color(0xFF0B5022),
@@ -936,18 +1009,7 @@ class _HomepageState extends State<Homepage> {
                           child: ElevatedButton(
                             onPressed: () {
                               Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => GymProfileViewScreen(
-                                        cityController: TextEditingController(),
-                                        areaController: TextEditingController(),
-                                        allweekdayHoursController:
-                                            TextEditingController(),
-                                        priceMonthController:
-                                            TextEditingController(),
-                                        price3MonthsController:
-                                            TextEditingController(),
-                                        priceYearController:
-                                            TextEditingController(),
-                                      )));
+                                  builder: (context) => ShopsScreen()));
                             },
                             style: ElevatedButton.styleFrom(
                               elevation: 10,
@@ -985,6 +1047,7 @@ class _HomepageState extends State<Homepage> {
                           style: TextStyle(
                               fontSize: 28,
                               color: Colors.black,
+                              fontFamily: "IBMPlexSansArabic",
                               shadows: [
                                 Shadow(
                                     color: Colors.black,
@@ -1034,6 +1097,7 @@ class _HomepageState extends State<Homepage> {
                                         fontSize: 14,
                                         fontWeight: FontWeight.bold,
                                         color: Color(0xFF0B5022),
+                                        fontFamily: "IBMPlexSansArabic",
                                       ),
                                     ),
                                     Row(
@@ -1061,7 +1125,12 @@ class _HomepageState extends State<Homepage> {
                             width: 180,
                             child: Card(
                               child: Center(
-                                child: Text("خطأ في تحميل البيانات"),
+                                child: Text(
+                                  "خطأ في تحميل البيانات",
+                                  style: TextStyle(
+                                    fontFamily: "IBMPlexSansArabic",
+                                  ),
+                                ),
                               ),
                             ),
                           );
@@ -1103,6 +1172,9 @@ class _NotificationBellState extends State<NotificationBell> {
               _isNotificationActive
                   ? 'تم تفعيل الإشعارات'
                   : 'تم إلغاء تفعيل الإشعارات',
+              style: TextStyle(
+                fontFamily: "IBMPlexSansArabic",
+              ),
             ),
             duration: Duration(seconds: 2),
           ),
@@ -1141,13 +1213,23 @@ class appsearch extends SearchDelegate {
     return ListView(
       children: [
         ListTile(
-          title: Text('نتيجة 1: $query'),
+          title: Text(
+            'نتيجة 1: $query',
+            style: TextStyle(
+              fontFamily: "IBMPlexSansArabic",
+            ),
+          ),
           onTap: () {
             // تنفيذ الإجراء عند النقر على نتيجة معينة
           },
         ),
         ListTile(
-          title: Text('نتيجة 2: $query'),
+          title: Text(
+            'نتيجة 2: $query',
+            style: TextStyle(
+              fontFamily: "IBMPlexSansArabic",
+            ),
+          ),
           onTap: () {
             // تنفيذ الإجراء عند النقر على نتيجة معينة
           },
@@ -1162,13 +1244,23 @@ class appsearch extends SearchDelegate {
     return ListView(
       children: [
         ListTile(
-          title: Text('اقتراح 1: $query'),
+          title: Text(
+            'اقتراح 1: $query',
+            style: TextStyle(
+              fontFamily: "IBMPlexSansArabic",
+            ),
+          ),
           onTap: () {
             // تنفيذ الإجراء عند النقر على اقتراح معين
           },
         ),
         ListTile(
-          title: Text('اقتراح 2: $query'),
+          title: Text(
+            'اقتراح 2: $query',
+            style: TextStyle(
+              fontFamily: "IBMPlexSansArabic",
+            ),
+          ),
           onTap: () {
             // تنفيذ الإجراء عند النقر على اقتراح معين
           },

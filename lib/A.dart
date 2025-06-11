@@ -7,7 +7,8 @@ class MainLogin1 extends StatefulWidget {
   State<MainLogin1> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<MainLogin1> with SingleTickerProviderStateMixin {
+class _LoginScreenState extends State<MainLogin1>
+    with SingleTickerProviderStateMixin {
   bool _obscureText = true;
   late AnimationController _controller;
   late Animation<double> _animation;
@@ -52,7 +53,8 @@ class _LoginScreenState extends State<MainLogin1> with SingleTickerProviderState
                 left: 0,
                 right: 0,
                 child: Container(
-                  height: MediaQuery.of(context).size.height * 0.2, // ارتفاع الجزء الأبيض
+                  height: MediaQuery.of(context).size.height *
+                      0.2, // ارتفاع الجزء الأبيض
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.only(
@@ -87,6 +89,9 @@ class _LoginScreenState extends State<MainLogin1> with SingleTickerProviderState
                     decoration: InputDecoration(
                       prefixIcon: Icon(Icons.person, color: Colors.grey),
                       hintText: 'Email@gmail.com',
+                      hintStyle: TextStyle(
+                        fontFamily: "IBMPlexSansArabic",
+                      ),
                       filled: true,
                       fillColor: Colors.white,
                       border: OutlineInputBorder(
@@ -103,7 +108,9 @@ class _LoginScreenState extends State<MainLogin1> with SingleTickerProviderState
                       prefixIcon: Icon(Icons.lock, color: Colors.grey),
                       suffixIcon: IconButton(
                         icon: Icon(
-                          _obscureText ? Icons.visibility : Icons.visibility_off,
+                          _obscureText
+                              ? Icons.visibility
+                              : Icons.visibility_off,
                           color: Colors.grey,
                         ),
                         onPressed: () {
@@ -113,6 +120,9 @@ class _LoginScreenState extends State<MainLogin1> with SingleTickerProviderState
                         },
                       ),
                       hintText: '••••••••',
+                      hintStyle: TextStyle(
+                        fontFamily: "IBMPlexSansArabic",
+                      ),
                       filled: true,
                       fillColor: Colors.white,
                       border: OutlineInputBorder(
@@ -127,7 +137,10 @@ class _LoginScreenState extends State<MainLogin1> with SingleTickerProviderState
                       onPressed: () {},
                       child: Text(
                         'نسيت كلمة السر؟',
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontFamily: "IBMPlexSansArabic",
+                        ),
                       ),
                     ),
                   ),
@@ -145,7 +158,10 @@ class _LoginScreenState extends State<MainLogin1> with SingleTickerProviderState
                     ),
                     child: Text(
                       'دخول',
-                      style: TextStyle(fontSize: 18),
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontFamily: "IBMPlexSansArabic",
+                      ),
                     ),
                   ),
                   SizedBox(height: 16),
@@ -155,13 +171,19 @@ class _LoginScreenState extends State<MainLogin1> with SingleTickerProviderState
                     children: [
                       Text(
                         'ليس لديك حساب؟ ',
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontFamily: "IBMPlexSansArabic",
+                        ),
                       ),
                       TextButton(
                         onPressed: () {},
                         child: Text(
                           'اشترك الآن',
-                          style: TextStyle(color: Colors.white),
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontFamily: "IBMPlexSansArabic",
+                          ),
                         ),
                       ),
                     ],

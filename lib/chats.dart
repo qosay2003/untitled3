@@ -60,6 +60,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   color: Color(0xFF0B5022),
                   fontWeight: FontWeight.bold,
                   fontSize: 20,
+                  fontFamily: "IBMPlexSansArabic",
                 ),
                 textDirection: TextDirection.rtl,
                 overflow: TextOverflow.ellipsis,
@@ -122,7 +123,10 @@ class _ChatScreenState extends State<ChatScreen> {
                           textDirection: TextDirection.rtl,
                           decoration: InputDecoration(
                             hintText: 'اكتب رسالتك...',
-                            hintStyle: TextStyle(color: Colors.grey),
+                            hintStyle: TextStyle(
+                              color: Colors.grey,
+                              fontFamily: "IBMPlexSansArabic",
+                            ),
                             filled: true,
                             fillColor: Colors.white,
                             border: OutlineInputBorder(
@@ -181,6 +185,7 @@ class _ChatScreenState extends State<ChatScreen> {
               style: TextStyle(
                 color: isMe ? Colors.white : Colors.black,
                 fontSize: 16,
+                fontFamily: "IBMPlexSansArabic",
               ),
               textDirection: TextDirection.rtl,
             ),
@@ -190,6 +195,7 @@ class _ChatScreenState extends State<ChatScreen> {
               style: TextStyle(
                 color: isMe ? Colors.white70 : Colors.black,
                 fontSize: 12,
+                fontFamily: "IBMPlexSansArabic",
               ),
             ),
           ],

@@ -8,78 +8,18 @@ class ChatListScreen extends StatelessWidget {
   final List<Map<String, dynamic>> users = const [
     {
       'name': ' قصي الجعبري ',
-      'image': 'img/my.jpeg',
+      'image': 'img/logo.png',
       'unreadCount': '2', // عدد الرسائل غير المقروءة
     },
     {
-      'name': ' هلا النجار',
-      'image': 'img/my.jpeg',
-      'unreadCount': '100',
+      'name': '  براء ',
+      'image': 'img/logo.png',
+      'unreadCount': '2', // عدد الرسائل غير المقروءة
     },
     {
-      'name': ' اسامه ابريوش ',
-      'image': 'img/my.jpeg',
-      'unreadCount': '5',
-    },
-    {
-      'name': ' هلا النجار ',
-      'image': 'img/my.jpeg',
-      'unreadCount': '5',
-    },
-    {
-      'name': ' هلا النجار ',
-      'image': 'img/my.jpeg',
-      'unreadCount': '5',
-    },
-    {
-      'name': ' هلا النجار ',
-      'image': 'img/my.jpeg',
-      'unreadCount': '5',
-    },
-    {
-      'name': ' هلا النجار ',
-      'image': 'img/my.jpeg',
-      'unreadCount': '5',
-    },
-    {
-      'name': ' هلا النجار ',
-      'image': 'img/my.jpeg',
-      'unreadCount': '5',
-    },
-    {
-      'name': ' هلا النجار ',
-      'image': 'img/my.jpeg',
-      'unreadCount': '5',
-    },
-    {
-      'name': ' هلا النجار ',
-      'image': 'img/my.jpeg',
-      'unreadCount': '5',
-    },
-    {
-      'name': ' هلا النجار ',
-      'image': 'img/my.jpeg',
-      'unreadCount': '5',
-    },
-    {
-      'name': ' هلا النجار ',
-      'image': 'img/my.jpeg',
-      'unreadCount': '5',
-    },
-    {
-      'name': ' هلا النجار ',
-      'image': 'img/my.jpeg',
-      'unreadCount': '5',
-    },
-    {
-      'name': ' هلا النجار ',
-      'image': 'img/my.jpeg',
-      'unreadCount': '5',
-    },
-    {
-      'name': ' هلا النجار ',
-      'image': 'img/my.jpeg',
-      'unreadCount': '5',
+      'name': '  يزن ',
+      'image': 'img/logo.png',
+      'unreadCount': '2', // عدد الرسائل غير المقروءة
     },
   ];
 
@@ -98,6 +38,7 @@ class ChatListScreen extends StatelessWidget {
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
                   fontSize: 20,
+                  fontFamily: "IBMPlexSansArabic",
                 ),
                 textDirection: TextDirection.rtl,
               ),
@@ -124,7 +65,7 @@ class ChatListScreen extends StatelessWidget {
               itemBuilder: (context, index) {
                 final user = users[index];
                 return Card(
-                  color: Color(0xFFAAAAAAA),
+                  color: Color(0xFFAAAAAA),
                   elevation: 5,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15),
@@ -152,6 +93,7 @@ class ChatListScreen extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                             fontSize: 18,
                             color: Color(0xFF0B5022),
+                            fontFamily: "IBMPlexSansArabic",
                           ),
                           textDirection: TextDirection.rtl,
                         ),
@@ -179,6 +121,7 @@ class ChatListScreen extends StatelessWidget {
                                   color: Colors.white,
                                   fontSize: 12,
                                   fontWeight: FontWeight.bold,
+                                  fontFamily: "IBMPlexSansArabic",
                                 ),
                               ),
                             ),

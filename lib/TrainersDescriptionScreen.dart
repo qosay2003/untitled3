@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:untitled3/manageSubscribers.dart';
 
 class GymProfileScreen extends StatefulWidget {
   const GymProfileScreen({super.key});
@@ -73,7 +74,7 @@ class _GymProfileScreenState extends State<GymProfileScreen> {
               ClipRRect(
                 borderRadius: BorderRadius.circular(30),
                 child: Image.asset(
-                  'img/my.jpeg',
+                  'img/logo.png',
                   height: 400,
                   width: 400,
                   fit: BoxFit.cover,
@@ -87,6 +88,7 @@ class _GymProfileScreenState extends State<GymProfileScreen> {
                   fontSize: 25,
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
+                  fontFamily: "IBMPlexSansArabic",
                 ),
               ),
               SizedBox(height: 10),
@@ -152,7 +154,10 @@ class _GymProfileScreenState extends State<GymProfileScreen> {
                                     style: TextStyle(fontSize: 17),
                                     decoration: InputDecoration(
                                       hintText: "أدخل الخدمة ${index + 1}",
-                                      hintStyle: TextStyle(fontSize: 17),
+                                      hintStyle: TextStyle(
+                                        fontSize: 17,
+                                        fontFamily: "IBMPlexSansArabic",
+                                      ),
                                       filled: true,
                                       fillColor: Colors.white,
                                       border: OutlineInputBorder(
@@ -177,6 +182,7 @@ class _GymProfileScreenState extends State<GymProfileScreen> {
                               style: TextStyle(
                                 color: Color(0xFF0B5022),
                                 fontSize: 16,
+                                fontFamily: "IBMPlexSansArabic",
                               ),
                             ),
                           ),
@@ -218,6 +224,35 @@ class _GymProfileScreenState extends State<GymProfileScreen> {
                       color: Colors.white,
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
+                      fontFamily: "IBMPlexSansArabic",
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: 10), // Separator between buttons
+              // زر إلغاء
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => Managesubscribers()));
+                    // لا يقوم بأي إجراء (كما طلب)
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color(0xFF0B5022),
+                    padding: EdgeInsets.symmetric(vertical: 15),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                  ),
+                  child: Text(
+                    'ادارة الاشترااكات',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: "IBMPlexSansArabic",
                     ),
                   ),
                 ),
@@ -286,7 +321,10 @@ class _GymProfileScreenState extends State<GymProfileScreen> {
               textAlign: TextAlign.center,
               decoration: InputDecoration(
                 hintText: "JD",
-                hintStyle: TextStyle(color: Colors.white),
+                hintStyle: TextStyle(
+                  color: Colors.white,
+                  fontFamily: "IBMPlexSansArabic",
+                ),
                 border: InputBorder.none,
               ),
             ),

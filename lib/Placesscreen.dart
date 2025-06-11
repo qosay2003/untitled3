@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:untitled3/TrainersDescriptionScreen.dart';
+import 'package:untitled3/userTrainDes.dart';
 
 class PlacesScreen extends StatefulWidget {
   final String mainTitle; // معلمة جديدة للعنوان الرئيسي
@@ -37,21 +38,28 @@ class _PlacesScreenState extends State<PlacesScreen> {
       'name': 'نادي فتنس تايم',
       'category': 'عمان',
       'rating': '5',
-      'image': 'img/my.jpeg'
+      'image': 'img/logo.png'
     },
     {
       'name': 'الأهرامات',
       'category': 'زرقاء',
       'rating': '4',
-      'image': 'img/my.jpeg'
+      'image': 'img/logo.png'
     },
     {
       'name': 'الفيروز',
       'category': 'عمان',
       'rating': '5',
-      'image': 'img/my.jpeg'
+      'image': 'img/logo.png'
     },
   ];
+  final TextEditingController cityController = TextEditingController();
+  final TextEditingController areaController = TextEditingController();
+  final TextEditingController allweekdayHoursController =
+      TextEditingController();
+  final TextEditingController priceMonthController = TextEditingController();
+  final TextEditingController price3MonthsController = TextEditingController();
+  final TextEditingController priceYearController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -71,6 +79,7 @@ class _PlacesScreenState extends State<PlacesScreen> {
               style: const TextStyle(
                 fontSize: 20,
                 color: Colors.white,
+                fontFamily: "IBMPlexSansArabic",
               ),
               textDirection: TextDirection.rtl,
             ),
@@ -140,7 +149,15 @@ class _PlacesScreenState extends State<PlacesScreen> {
                     child: ListTile(
                       onTap: () {
                         Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => GymProfileScreen()));
+                            builder: (context) => GymProfileViewScreen(
+                                cityController: cityController,
+                                areaController: areaController,
+                                allweekdayHoursController:
+                                    allweekdayHoursController,
+                                priceMonthController: priceMonthController,
+                                price3MonthsController: price3MonthsController,
+                                priceYearController: priceYearController,
+                                facilities: [])));
                       },
                       leading: null,
                       title: Row(
