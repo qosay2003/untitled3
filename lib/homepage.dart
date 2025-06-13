@@ -490,38 +490,69 @@ class _HomepageState extends State<Homepage> {
                   Navigator.pop(context);
                 },
               ),
-              ListTile(
-                trailing: Icon(
-                  Icons.manage_accounts,
-                  color: Color(0xFF0B5022),
-                ),
-                title: Text(
-                  ' ادارة صفحتي',
-                  textAlign: TextAlign.end,
-                  style: TextStyle(
-                    fontFamily: "IBMPlexSansArabic",
-                  ),
-                ),
-                onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => GymProfileScreen()));
-                },
-              ),
-              ListTile(
-                trailing: Icon(
-                  Icons.add_home_work_outlined,
-                  color: Color(0xFF0B5022),
-                ),
-                title: Text(
-                  '  إشتراكاتي ',
-                  textAlign: TextAlign.end,
-                  style: TextStyle(
-                    fontFamily: "IBMPlexSansArabic",
-                  ),
-                ),
-                onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => SubscriptionsScreen()));
+              FutureBuilder(
+                future: FirebaseFirestore.instance
+                    .collection("users")
+                    .doc(FirebaseAuth.instance.currentUser!.uid)
+                    .get(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return SizedBox();
+                  }
+
+                  if (snapshot.hasError) {
+                    return Text("حدث خطأ");
+                  }
+
+                  if (!snapshot.hasData || !snapshot.data!.exists) {
+                    return SizedBox();
+                  }
+
+                  final userData = snapshot.data!;
+
+                  final businessType =
+                      userData.data()!.containsKey("business_type")
+                          ? userData.get("business_type")
+                          : null;
+
+                  if (businessType == " مدرب رياضي" ||
+                      businessType == "  اخصائي تغذيه") {
+                    return ListTile(
+                      trailing: Icon(
+                        Icons.manage_accounts,
+                        color: Color(0xFF0B5022),
+                      ),
+                      title: Text(
+                        ' ادارة صفحتي',
+                        textAlign: TextAlign.end,
+                        style: TextStyle(
+                          fontFamily: "IBMPlexSansArabic",
+                        ),
+                      ),
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => GymProfileScreen()));
+                      },
+                    );
+                  }
+
+                  return ListTile(
+                    trailing: Icon(
+                      Icons.add_home_work_outlined,
+                      color: Color(0xFF0B5022),
+                    ),
+                    title: Text(
+                      '  إشتراكاتي ',
+                      textAlign: TextAlign.end,
+                      style: TextStyle(
+                        fontFamily: "IBMPlexSansArabic",
+                      ),
+                    ),
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => SubscriptionsScreen()));
+                    },
+                  );
                 },
               ),
               ListTile(

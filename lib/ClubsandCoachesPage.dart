@@ -1,3 +1,7 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:untitled3/shopBhealthy.dart';
 import 'package:untitled3/userTrainDes.dart';
@@ -142,67 +146,83 @@ class _ShopsScreenState extends State<ShopsScreen> {
                 ),
               ),
             ),
-            Container(
-              height: 150,
-              width: double.infinity,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: nutritionists.length,
-                itemBuilder: (context, index) {
-                  return Container(
-                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 5),
-                    width: 150,
-                    child: Card(
-                      color: Colors.grey,
-                      elevation: 5,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: InkWell(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => GymProfileViewScreen(
-                                cityController: cityController,
-                                areaController: areaController,
-                                allweekdayHoursController:
-                                    allweekdayHoursController,
-                                priceMonthController: priceMonthController,
-                                price3MonthsController: price3MonthsController,
-                                priceYearController: priceYearController,
-                                facilities: [], // Pass an empty list for now
-                              ),
+            StreamBuilder<QuerySnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection("users")
+                  .where("business_type", isEqualTo: "  اخصائي تغذيه")
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (snapshot.hasError) return Text('Error: ${snapshot.error}');
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(child: CircularProgressIndicator());
+                }
+
+                return Container(
+                  height: 150,
+                  width: double.infinity,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: snapshot.data?.docs.length ?? 0,
+                    itemBuilder: (context, index) {
+                      Uint8List bytes = base64Decode(
+                          snapshot.data!.docs[index]['image_data']);
+                      return Container(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+                        width: 150,
+                        child: Card(
+                          color: Colors.grey,
+                          elevation: 5,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => GymProfileViewScreen(
+                                    cityController: cityController,
+                                    areaController: areaController,
+                                    allweekdayHoursController:
+                                        allweekdayHoursController,
+                                    priceMonthController: priceMonthController,
+                                    price3MonthsController:
+                                        price3MonthsController,
+                                    priceYearController: priceYearController,
+                                    facilities: [], // Pass an empty list for now
+                                  ),
+                                ),
+                              );
+                            },
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                CircleAvatar(
+                                  radius: 40,
+                                  backgroundImage: MemoryImage(bytes),
+                                  backgroundColor: Colors.grey[200],
+                                ),
+                                SizedBox(height: 8),
+                                Text(
+                                  snapshot.data!.docs[index]['business_name'],
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFF0B5022),
+                                    fontFamily: "IBMPlexSansArabic",
+                                  ),
+                                ),
+                              ],
                             ),
-                          );
-                        },
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            CircleAvatar(
-                              radius: 40,
-                              backgroundImage:
-                                  AssetImage(nutritionists[index]['image']!),
-                              backgroundColor: Colors.grey[200],
-                            ),
-                            SizedBox(height: 8),
-                            Text(
-                              nutritionists[index]['name']!,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xFF0B5022),
-                                fontFamily: "IBMPlexSansArabic",
-                              ),
-                            ),
-                          ],
+                          ),
                         ),
-                      ),
-                    ),
-                  );
-                },
-              ),
+                      );
+                    },
+                  ),
+                );
+              },
             ),
             SizedBox(height: 16), // Separator
             // Trainers Section
@@ -217,67 +237,79 @@ class _ShopsScreenState extends State<ShopsScreen> {
                 ),
               ),
             ),
-            Container(
-              height: 150,
-              width: double.infinity,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: trainers.length,
-                itemBuilder: (context, index) {
-                  return Container(
-                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 5),
-                    width: 150,
-                    child: Card(
-                      color: Colors.grey,
-                      elevation: 5,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: InkWell(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => GymProfileViewScreen(
-                                cityController: cityController,
-                                areaController: areaController,
-                                allweekdayHoursController:
-                                    allweekdayHoursController,
-                                priceMonthController: priceMonthController,
-                                price3MonthsController: price3MonthsController,
-                                priceYearController: priceYearController,
-                                facilities: [],
-                              ),
+            StreamBuilder<QuerySnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection("users")
+                  .where("business_type", isEqualTo: " مدرب رياضي")
+                  .snapshots(),
+              builder: (context, snapshot) {
+                return Container(
+                  height: 150,
+                  width: double.infinity,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: snapshot.data?.docs.length ?? 0,
+                    itemBuilder: (context, index) {
+                      Uint8List bytes = base64Decode(
+                          snapshot.data!.docs[index]['image_data']);
+                      return Container(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+                        width: 150,
+                        child: Card(
+                          color: Colors.grey,
+                          elevation: 5,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => GymProfileViewScreen(
+                                    cityController: cityController,
+                                    areaController: areaController,
+                                    allweekdayHoursController:
+                                        allweekdayHoursController,
+                                    priceMonthController: priceMonthController,
+                                    price3MonthsController:
+                                        price3MonthsController,
+                                    priceYearController: priceYearController,
+                                    facilities: [],
+                                  ),
+                                ),
+                              );
+                            },
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                CircleAvatar(
+                                  radius: 40,
+                                  backgroundImage:
+                                      MemoryImage(bytes),
+                                  backgroundColor: Colors.grey[200],
+                                ),
+                                SizedBox(height: 8),
+                                Text(
+                                  snapshot.data!.docs[index]['business_name'],
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFF0B5022),
+                                    fontFamily: "IBMPlexSansArabic",
+                                  ),
+                                ),
+                              ],
                             ),
-                          );
-                        },
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            CircleAvatar(
-                              radius: 40,
-                              backgroundImage:
-                                  AssetImage(trainers[index]['image']!),
-                              backgroundColor: Colors.grey[200],
-                            ),
-                            SizedBox(height: 8),
-                            Text(
-                              trainers[index]['name']!,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xFF0B5022),
-                                fontFamily: "IBMPlexSansArabic",
-                              ),
-                            ),
-                          ],
+                          ),
                         ),
-                      ),
-                    ),
-                  );
-                },
-              ),
+                      );
+                    },
+                  ),
+                );
+              },
             ),
           ],
         ),

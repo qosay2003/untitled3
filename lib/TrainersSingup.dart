@@ -134,7 +134,7 @@ class _trainerssingupState extends State<trainerssingup> {
         "business_type": selected_item,
         "city_of_residence": city_of_residence,
         "gender": gender,
-        "image_data": base64IdImage,
+        "id_photo": base64IdImage,
         "work_practice_image": base64WorkImage,
         'role': 'user',
       });
