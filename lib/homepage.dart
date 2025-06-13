@@ -524,6 +524,20 @@ class _HomepageState extends State<Homepage> {
                       builder: (context) => SubscriptionsScreen()));
                 },
               ),
+              ListTile(
+                trailing: Icon(
+                  Icons.logout,
+                  color: Color(0xFF0B5022),
+                ),
+                title: Text(
+                  '  تسجيل خروج ',
+                  textAlign: TextAlign.end,
+                  style: TextStyle(
+                    fontFamily: "IBMPlexSansArabic",
+                  ),
+                ),
+                onTap: () {},
+              ),
             ],
           ),
         ),

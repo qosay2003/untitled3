@@ -19,17 +19,17 @@ class _PlacesScreenState extends State<PlacesScreen> {
   final List<Map<String, String>> filters = [
     {'name': 'الكل', 'image': 'img/greenlogo.png'},
     {'name': 'عمان', 'image': 'img/amman.jpg'},
-    {'name': 'زرقاء', 'image': 'img/zarqa.jpg'},
-    {'name': 'بلقاء', 'image': 'img/blqaa.jpg'},
+    {'name': 'الزرقاء', 'image': 'img/zarqa.jpg'},
+    {'name': 'البلقاء', 'image': 'img/blqaa.jpg'},
     {'name': 'مأدبا', 'image': 'img/madaba.jpg'},
     {'name': 'إربد', 'image': 'img/irbid.jpg'},
-    {'name': 'مفرق', 'image': 'img/mafraq.jpg'},
+    {'name': 'المفرق', 'image': 'img/mafraq.jpg'},
     {'name': 'جرش', 'image': 'img/jerash.jpg'},
     {'name': 'عجلون', 'image': 'img/ajloon.jpg'},
     {'name': 'معان', 'image': 'img/maan.jpg'},
-    {'name': 'عقبه', 'image': 'img/aqaba.jpg'},
-    {'name': 'كرك', 'image': 'img/karak.jpg'},
-    {'name': 'طفية', 'image': 'img/tafilah.jpg'},
+    {'name': 'العقبه', 'image': 'img/aqaba.jpg'},
+    {'name': 'الكرك', 'image': 'img/karak.jpg'},
+    {'name': 'الطفيلة', 'image': 'img/tafilah.jpg'},
   ];
 
   // قائمة الأماكن (بيانات وهمية) مع إضافة حقل الصورة

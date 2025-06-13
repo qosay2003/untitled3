@@ -17,15 +17,14 @@ class _trainerssingupState extends State<trainerssingup> {
   final Color backgroundColor = Color(0xFF0C552E);
   String? selected_item;
   String? gender;
+  String? city_of_residence;
   File? idImage;
   File? work_practice_image;
-  TextEditingController city_of_residence = TextEditingController();
-
   TextEditingController business_name = TextEditingController();
   TextEditingController email = TextEditingController();
-
   TextEditingController password = TextEditingController();
   TextEditingController confirm_password = TextEditingController();
+
   Future<void> pickImageSelectFromGallery() async {
     final picker = ImagePicker();
     final pickedFile = await picker.pickImage(
@@ -133,7 +132,7 @@ class _trainerssingupState extends State<trainerssingup> {
         "business_name": business_name.text,
         "email": email.text,
         "business_type": selected_item,
-        "city_of_residence": city_of_residence.text,
+        "city_of_residence": city_of_residence,
         "gender": gender,
         "image_data": base64IdImage,
         "work_practice_image": base64WorkImage,
@@ -203,30 +202,31 @@ class _trainerssingupState extends State<trainerssingup> {
                     Row(
                       children: [
                         Expanded(
-                          child: buildFieldWithIcon(
-                              'موقع العمل',
-                              'مدينة الإقامة',
-                              Icons.location_on,
-                              city_of_residence),
+                          child: buildDropdown('موقع العمل', [
+                            'عمان',
+                            'الزرقاء',
+                            'إربد',
+                            'البلقاء',
+                            'مادبا',
+                            'الكرك',
+                            'الطفيلة',
+                            'معان',
+                            'العقبة',
+                            'جرش',
+                            'عجلون',
+                            'المفرق'
+                          ]),
                         ),
                         SizedBox(width: 10),
                         Expanded(
                           child: buildDropdownWithIcons('نوع العمل', [
                             {
-                              'label': 'كمال الاجسام',
-                              'image': 'img/damble.png',
+                              'label': '  اخصائي تغذيه',
+                              'image': 'img/greenlogo.png',
                             },
                             {
-                              'label': 'اكاديمية كره',
-                              'image': 'img/football.png',
-                            },
-                            {
-                              'label': 'مسبح',
-                              'image': 'img/bool.png',
-                            },
-                            {
-                              'label': 'فنون قتاليه',
-                              'image': 'img/kill.png',
+                              'label': ' مدرب رياضي',
+                              'image': 'img/greenlogo.png',
                             },
                           ]),
                         ),
@@ -238,14 +238,14 @@ class _trainerssingupState extends State<trainerssingup> {
                         Expanded(
                           child: buildImagePicker(
                             'صورة الهوية المدنية',
-                            'أرفع صورة عن الهوية المدنية  ',
+                            'أرفع صورة عن الهوية المدنية',
                             () {
                               showDialog(
                                 context: context,
                                 builder: (context) {
                                   return AlertDialog(
                                     title: Text(
-                                      "اختيار طريقه تحميل الصوره ",
+                                      "اختيار طريقة تحميل الصورة",
                                       style: TextStyle(
                                         fontFamily: "IBMPlexSansArabic",
                                       ),
@@ -284,23 +284,29 @@ class _trainerssingupState extends State<trainerssingup> {
                                 context: context,
                                 builder: (context) {
                                   return AlertDialog(
-                                    title: Text("اختيار طريقه تحميل الصوره ",
-                                        style: TextStyle(
-                                          fontFamily: "IBMPlexSansArabic",
-                                        )),
+                                    title: Text(
+                                      "اختيار طريقة تحميل الصورة",
+                                      style: TextStyle(
+                                        fontFamily: "IBMPlexSansArabic",
+                                      ),
+                                    ),
                                     actions: [
                                       TextButton(
                                           onPressed: pickWorkImageFromGallery,
-                                          child: Text("من المعرض",
-                                              style: TextStyle(
-                                                fontFamily: "IBMPlexSansArabic",
-                                              ))),
+                                          child: Text(
+                                            "من المعرض",
+                                            style: TextStyle(
+                                              fontFamily: "IBMPlexSansArabic",
+                                            ),
+                                          )),
                                       TextButton(
                                           onPressed: pickWorkImageFromCamera,
-                                          child: Text("بأستخدام الكاميرا",
-                                              style: TextStyle(
-                                                fontFamily: "IBMPlexSansArabic",
-                                              ))),
+                                          child: Text(
+                                            "باستخدام الكاميرا",
+                                            style: TextStyle(
+                                              fontFamily: "IBMPlexSansArabic",
+                                            ),
+                                          )),
                                     ],
                                   );
                                 },
@@ -311,11 +317,8 @@ class _trainerssingupState extends State<trainerssingup> {
                       ],
                     ),
                     buildFieldWithIcon(
-                        'كلمة السر',
-                        'أدخل كلمة السر',
-                        Icons.lock,
-                        obscure: true,
-                        password),
+                        'كلمة السر', 'أدخل كلمة السر', Icons.lock, password,
+                        obscure: true),
                     buildField('تأكيد كلمة السر', 'أدخل كلمة السر مرة أخرى',
                         confirm_password,
                         obscure: true),
@@ -366,6 +369,7 @@ class _trainerssingupState extends State<trainerssingup> {
                   fontFamily: "IBMPlexSansArabic")),
           const SizedBox(height: 5),
           TextField(
+            controller: controller,
             obscureText: obscure,
             textAlign: TextAlign.right,
             textDirection: TextDirection.rtl,
@@ -404,6 +408,7 @@ class _trainerssingupState extends State<trainerssingup> {
                   fontFamily: "IBMPlexSansArabic")),
           const SizedBox(height: 5),
           TextField(
+            controller: controller,
             obscureText: obscure,
             textAlign: TextAlign.right,
             textDirection: TextDirection.rtl,
@@ -452,14 +457,18 @@ class _trainerssingupState extends State<trainerssingup> {
                 borderSide: BorderSide.none,
               ),
             ),
-            hint: Text('اختر $label', textDirection: TextDirection.rtl),
+            hint: Text('اختر $label',
+                textDirection: TextDirection.rtl,
+                style: TextStyle(fontFamily: "IBMPlexSansArabic")),
             items: items.map((Map<String, dynamic> item) {
               return DropdownMenuItem<String>(
                 value: item['label'],
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Text(item['label'], textDirection: TextDirection.rtl),
+                    Text(item['label'],
+                        textDirection: TextDirection.rtl,
+                        style: TextStyle(fontFamily: "IBMPlexSansArabic")),
                     SizedBox(width: 10),
                     Image.asset(
                       item['image'],
@@ -471,7 +480,9 @@ class _trainerssingupState extends State<trainerssingup> {
               );
             }).toList(),
             onChanged: (item) {
-              selected_item = item;
+              setState(() {
+                selected_item = item;
+              });
             },
           ),
         ],
@@ -517,9 +528,13 @@ class _trainerssingupState extends State<trainerssingup> {
                 ),
               );
             }).toList(),
-            onChanged: (item) {
+            onChanged: (value) {
               setState(() {
-                gender = item;
+                if (label == 'موقع العمل') {
+                  city_of_residence = value;
+                } else {
+                  gender = value;
+                }
               });
             },
           ),
@@ -528,8 +543,7 @@ class _trainerssingupState extends State<trainerssingup> {
     );
   }
 
-  Widget buildImagePicker(
-      String label, String hint, final VoidCallback onPressed) {
+  Widget buildImagePicker(String label, String hint, VoidCallback onPressed) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Column(
