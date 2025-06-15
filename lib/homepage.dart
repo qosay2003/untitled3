@@ -109,7 +109,7 @@ class _HomepageState extends State<Homepage> {
       String userId = FirebaseAuth.instance.currentUser!.uid;
 
       await FirebaseFirestore.instance.collection("users").doc(userId).update({
-        "image_data": base64Image,
+        "user_image": base64Image,
         "last_updated": FieldValue.serverTimestamp(),
       });
 
@@ -137,7 +137,7 @@ class _HomepageState extends State<Homepage> {
 
       if (userDoc.exists && userDoc.data() != null) {
         String? base64Image =
-            (userDoc.data() as Map<String, dynamic>)['image_data'];
+            (userDoc.data() as Map<String, dynamic>)['user_image'];
         if (base64Image != null && base64Image.isNotEmpty) {
           return base64Decode(base64Image);
         }
@@ -515,8 +515,7 @@ class _HomepageState extends State<Homepage> {
                           ? userData.get("business_type")
                           : null;
 
-                  if (businessType == " مدرب رياضي" ||
-                      businessType == "  اخصائي تغذيه") {
+                  if (businessType != null) {
                     return ListTile(
                       trailing: Icon(
                         Icons.manage_accounts,

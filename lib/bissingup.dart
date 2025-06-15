@@ -102,12 +102,13 @@ class _BissingupState extends State<Bissingup> {
         email: email.text,
         password: password.text,
       );
+      userCredential.user!.updateDisplayName(business_name.text);
 
       await FirebaseFirestore.instance
           .collection("users")
           .doc(userCredential.user!.uid)
           .set({
-        "image_data": base64Image,
+        "id_photo": base64Image,
         "business_name": business_name.text,
         "email": email.text,
         "city_of_residence": city_of_residence.text,

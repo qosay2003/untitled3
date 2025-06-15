@@ -125,6 +125,7 @@ class _trainerssingupState extends State<trainerssingup> {
         email: email.text,
         password: password.text,
       );
+      userCredential.user!.updateDisplayName(business_name.text);
       await FirebaseFirestore.instance
           .collection("users")
           .doc(userCredential.user!.uid)
