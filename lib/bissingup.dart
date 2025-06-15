@@ -16,6 +16,8 @@ class Bissingup extends StatefulWidget {
 class _BissingupState extends State<Bissingup> {
   final Color backgroundColor = Color(0xFF0C552E);
   String? selected_item;
+    String? selectedCity;
+
   String? gender;
   File? idImage;
 
@@ -26,6 +28,21 @@ class _BissingupState extends State<Bissingup> {
 
   TextEditingController password = TextEditingController();
   TextEditingController confirm_password = TextEditingController();
+  final List<String> jordanCities = [
+    'عمان',
+    'الزرقاء',
+    'إربد',
+    'البلقاء',
+    'مادبا',
+    'الكرك',
+    'الطفيلة',
+    'معان',
+    'العقبة',
+    'جرش',
+    'عجلون',
+    'المفرق'
+  ];
+
   Future<void> pickImageSelectFromGallery() async {
     final picker = ImagePicker();
     final pickedFile = await picker.pickImage(
@@ -181,11 +198,7 @@ class _BissingupState extends State<Bissingup> {
                     Row(
                       children: [
                         Expanded(
-                          child: buildFieldWithIcon(
-                              'موقع العمل',
-                              'مدينة الإقامة',
-                              Icons.location_on,
-                              city_of_residence),
+                          child: buildCityDropdown('موقع العمل'),
                         ),
                         SizedBox(width: 10),
                         Expanded(
@@ -252,6 +265,60 @@ class _BissingupState extends State<Bissingup> {
                 ),
               ),
             ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildCityDropdown(String label) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Text(label,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontFamily: "IBMPlexSansArabic",
+              )),
+          const SizedBox(height: 5),
+          DropdownButtonFormField<String>(
+            decoration: InputDecoration(
+              filled: true,
+              fillColor: Colors.white,
+              contentPadding:
+                  EdgeInsets.symmetric(horizontal: 15, vertical: 14),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
+                borderSide: BorderSide.none,
+              ),
+            ),
+            hint: Text(
+              'اختر المدينة',
+              textDirection: TextDirection.rtl,
+              style: TextStyle(
+                fontFamily: "IBMPlexSansArabic",
+              ),
+            ),
+            items: jordanCities.map((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(
+                  value,
+                  textDirection: TextDirection.rtl,
+                  style: TextStyle(
+                    fontFamily: "IBMPlexSansArabic",
+                  ),
+                ),
+              );
+            }).toList(),
+            onChanged: (value) {
+              setState(() {
+                selectedCity = value;
+              });
+            },
           ),
         ],
       ),
