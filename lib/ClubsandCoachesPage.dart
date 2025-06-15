@@ -149,23 +149,41 @@ class _ShopsScreenState extends State<ShopsScreen> {
             StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance
                   .collection("users")
-                  .where("business_type", isEqualTo: "  اخصائي تغذيه")
+                  .where("business_type",
+                      isEqualTo: "اخصائي تغذيه") // Ensure no extra space
                   .snapshots(),
               builder: (context, snapshot) {
-                if (snapshot.hasError) return Text('Error: ${snapshot.error}');
+                if (snapshot.hasError) {
+                  return Text("حدث خطأ");
+                }
+
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Center(child: CircularProgressIndicator());
                 }
-
+                if (snapshot.data!.docs.isEmpty) {
+                  return Center(
+                    child: Text("لا يوجد أخصائيو تغذية متاحون حالياً"),
+                  );
+                }
                 return Container(
                   height: 150,
                   width: double.infinity,
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
-                    itemCount: snapshot.data?.docs.length ?? 0,
+                    itemCount: snapshot.data!.docs.length,
                     itemBuilder: (context, index) {
-                      Uint8List bytes = base64Decode(
-                          snapshot.data!.docs[index]['image_data']);
+                      Uint8List? bytes;
+                      try {
+                        if (snapshot.data!.docs[index]['user_image'] != null &&
+                            snapshot
+                                .data!.docs[index]['user_image'].isNotEmpty) {
+                          bytes = base64Decode(
+                              snapshot.data!.docs[index]['user_image']);
+                        }
+                      } catch (e) {
+                        print("Error decoding image: $e");
+                      }
+
                       return Container(
                         padding:
                             EdgeInsets.symmetric(horizontal: 8, vertical: 5),
@@ -200,7 +218,11 @@ class _ShopsScreenState extends State<ShopsScreen> {
                               children: [
                                 CircleAvatar(
                                   radius: 40,
-                                  backgroundImage: MemoryImage(bytes),
+                                  backgroundImage:
+                                      bytes != null && bytes.isNotEmpty
+                                          ? MemoryImage(bytes)
+                                          : AssetImage('img/logo.png')
+                                              as ImageProvider,
                                   backgroundColor: Colors.grey[200],
                                 ),
                                 SizedBox(height: 8),
@@ -240,9 +262,21 @@ class _ShopsScreenState extends State<ShopsScreen> {
             StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance
                   .collection("users")
-                  .where("business_type", isEqualTo: " مدرب رياضي")
+                  .where("business_type", isEqualTo: "مدرب رياضي")
                   .snapshots(),
               builder: (context, snapshot) {
+                if (snapshot.hasError) {
+                  return Text("حدث خطأ");
+                }
+
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(child: CircularProgressIndicator());
+                }
+                if (snapshot.data!.docs.isEmpty) {
+                  return Center(
+                    child: Text("لا يوجد أخصائيو تغذية متاحون حالياً"),
+                  );
+                }
                 return Container(
                   height: 150,
                   width: double.infinity,
@@ -250,8 +284,17 @@ class _ShopsScreenState extends State<ShopsScreen> {
                     scrollDirection: Axis.horizontal,
                     itemCount: snapshot.data?.docs.length ?? 0,
                     itemBuilder: (context, index) {
-                      Uint8List bytes = base64Decode(
-                          snapshot.data!.docs[index]['image_data']);
+                      Uint8List? bytes;
+                      try {
+                        if (snapshot.data!.docs[index]['user_image'] != null &&
+                            snapshot
+                                .data!.docs[index]['user_image'].isNotEmpty) {
+                          bytes = base64Decode(
+                              snapshot.data!.docs[index]['user_image']);
+                        }
+                      } catch (e) {
+                        print("Error decoding image: $e");
+                      }
                       return Container(
                         padding:
                             EdgeInsets.symmetric(horizontal: 8, vertical: 5),
@@ -287,7 +330,10 @@ class _ShopsScreenState extends State<ShopsScreen> {
                                 CircleAvatar(
                                   radius: 40,
                                   backgroundImage:
-                                      MemoryImage(bytes),
+                                      bytes != null && bytes.isNotEmpty
+                                          ? MemoryImage(bytes)
+                                          : AssetImage('img/logo.png')
+                                              as ImageProvider,
                                   backgroundColor: Colors.grey[200],
                                 ),
                                 SizedBox(height: 8),

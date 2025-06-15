@@ -125,7 +125,7 @@ class _trainerssingupState extends State<trainerssingup> {
         email: email.text,
         password: password.text,
       );
-      userCredential.user!.updateDisplayName(business_name.text);
+      await userCredential.user!.updateDisplayName(business_name.text);
       await FirebaseFirestore.instance
           .collection("users")
           .doc(userCredential.user!.uid)
@@ -222,11 +222,11 @@ class _trainerssingupState extends State<trainerssingup> {
                         Expanded(
                           child: buildDropdownWithIcons('نوع العمل', [
                             {
-                              'label': '  اخصائي تغذيه',
+                              'label': 'اخصائي تغذيه',
                               'image': 'img/greenlogo.png',
                             },
                             {
-                              'label': ' مدرب رياضي',
+                              'label': 'مدرب رياضي',
                               'image': 'img/greenlogo.png',
                             },
                           ]),

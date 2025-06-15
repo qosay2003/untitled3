@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -153,9 +154,7 @@ class _ShopbhealthyState extends State<Shopbhealthy> {
             icon: const Icon(Icons.bookmark),
             onPressed: () {
               Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => RequestedProductsPage(
-                  orderedItems: orderedItems,
-                ),
+                builder: (context) => RequestedProductsPage(),
               ));
             },
           ),
@@ -179,6 +178,17 @@ class _ShopbhealthyState extends State<Shopbhealthy> {
       body: FutureBuilder(
         future: FirebaseFirestore.instance.collection("online_store").get(),
         builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return SizedBox();
+          }
+
+          if (snapshot.hasError) {
+            return Text("حدث خطأ");
+          }
+
+          if (!snapshot.hasData) {
+            return SizedBox();
+          }
           return GridView.builder(
             padding: const EdgeInsets.all(10),
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -523,6 +533,22 @@ class CheckoutPage extends StatefulWidget {
 }
 
 class _CheckoutPageState extends State<CheckoutPage> {
+  Future<String> assetImageToBase64(String assetPath) async {
+    try {
+      
+      final byteData = await rootBundle.load(assetPath);
+
+      
+      final bytes = byteData.buffer.asUint8List();
+
+      
+      return base64Encode(bytes);
+    } catch (e) {
+      print('Error converting image to Base64: $e');
+      return ''; 
+    }
+  }
+
   String paymentMethod = 'عند الاستلام';
   final TextEditingController cardNumberController = TextEditingController();
   final TextEditingController expiryDateController = TextEditingController();
@@ -736,21 +762,52 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   backgroundColor: const Color(0xFF0B5022),
                   foregroundColor: Colors.white,
                 ),
-                onPressed: () {
+                onPressed: () async {
                   if (validateCardDetails()) {
-                    final shopState =
-                        context.findAncestorStateOfType<_ShopbhealthyState>();
-                    shopState?.addToOrderedItems(List.from(widget.cart));
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => RequestedProductsPage(
-                          orderedItems: List.from(widget.cart),
-                        ),
-                      ),
-                    ).then((_) {
+                    try {
+                      final user = FirebaseAuth.instance.currentUser;
+                      if (user == null) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('يجب تسجيل الدخول أولاً')),
+                        );
+                        return;
+                      }
+
+                      List<Map<String, dynamic>> orderItems = [];
+                      for (var item in widget.cart) {
+                        final imageBase64 =
+                            await assetImageToBase64(item.product.imageUrl);
+                        orderItems.add({
+                          "product_name": item.product.name,
+                          "quantity": item.quantity,
+                          "price": item.product.price,
+                          "image_base64": imageBase64,
+                        });
+                      }
+
+                      await FirebaseFirestore.instance
+                          .collection("order_history")
+                          .add({
+                        "user_id": user.uid,
+                        "order_date": FieldValue.serverTimestamp(),
+                        "total_price": totalPrice,
+                        "payment_method": paymentMethod,
+                        "status": "pending",
+                        "items": orderItems,
+                      });
+
                       widget.clearCart();
-                    });
+                      // Navigator.pushReplacement(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //     builder: (context) {},
+                      //   ),
+                      // );
+                    } catch (e) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('حدث خطأ: ${e.toString()}')),
+                      );
+                    }
                   }
                 },
                 child: const Text('إتمام الطلب'),
@@ -764,28 +821,18 @@ class _CheckoutPageState extends State<CheckoutPage> {
 }
 
 class RequestedProductsPage extends StatelessWidget {
-  final List<CartItem> orderedItems;
-
-  const RequestedProductsPage({
-    super.key,
-    required this.orderedItems,
-  });
+  const RequestedProductsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    double totalPrice = orderedItems.fold(
-      0,
-      (sum, item) => sum + item.product.price * item.quantity,
-    );
-
-    return Scaffold(
-      backgroundColor: const Color(0xFFAAAAAA),
-      appBar: AppBar(
-        iconTheme: const IconThemeData(color: Colors.white),
-        backgroundColor: const Color(0xFF0B5022),
-        actions: [
-          const SizedBox(width: 170),
-          const Text(
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      return Scaffold(
+        backgroundColor: const Color(0xFFAAAAAA),
+        appBar: AppBar(
+          iconTheme: const IconThemeData(color: Colors.white),
+          backgroundColor: const Color(0xFF0B5022),
+          title: const Text(
             'المنتجات المطلوبة',
             style: TextStyle(
               color: Colors.white,
@@ -793,84 +840,138 @@ class RequestedProductsPage extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
-          const SizedBox(width: 20),
-        ],
+        ),
+        body: const Center(
+          child: Text('يجب تسجيل الدخول لعرض الطلبات السابقة'),
+        ),
+      );
+    }
+
+    return Scaffold(
+      backgroundColor: const Color(0xFFAAAAAA),
+      appBar: AppBar(
+        iconTheme: const IconThemeData(color: Colors.white),
+        backgroundColor: const Color(0xFF0B5022),
+        title: const Text(
+          'المنتجات المطلوبة',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: orderedItems.isEmpty
-            ? const Center(child: Text('لا توجد منتجات مطلوبة'))
-            : Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  const Text(
-                    'تفاصيل الطلب',
-                    textAlign: TextAlign.right,
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 16),
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: orderedItems.length,
-                      itemBuilder: (context, index) {
-                        final item = orderedItems[index];
+      body: StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance
+            .collection("order_history")
+            .where("user_id", isEqualTo: user.uid)
+            .orderBy("order_date", descending: true)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          if (snapshot.hasError) {
+            return Center(child: Text('حدث خطأ: ${snapshot.error}'));
+          }
+
+          if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+            return const Center(child: Text('لا توجد طلبات سابقة'));
+          }
+
+          return ListView.builder(
+            padding: const EdgeInsets.all(16),
+            itemCount: snapshot.data!.docs.length,
+            itemBuilder: (context, index) {
+              final order = snapshot.data!.docs[index];
+              final items = (order['items'] as List<dynamic>?) ?? [];
+              final totalPrice = order['total_price'] ?? 0;
+              final orderDate = (order['order_date'] as Timestamp?)?.toDate() ??
+                  DateTime.now();
+              final status = order['status'] ?? 'unknown';
+
+              return Card(
+                margin: const EdgeInsets.only(bottom: 16),
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        'رقم الطلب: ${order.id}',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
+                      Text(
+                        'التاريخ: ${orderDate.toLocal().toString().split(' ')[0]}',
+                      ),
+                      Text('الحالة: $status'),
+                      const SizedBox(height: 10),
+                      const Divider(),
+                      const Text(
+                        'المنتجات:',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      ...items.map((item) {
+                        final productName = item['product_name']?.toString() ??
+                            'Unknown Product';
+                        final quantity = item['quantity']?.toString() ?? '0';
+                        final price = (item['price'] ?? 0).toDouble();
+                        final total = price * (item['quantity'] ?? 1);
+
+                        Widget imageWidget = const Icon(Icons.shopping_bag);
+                        try {
+                          if (item['image_base64'] != null &&
+                              item['image_base64'].toString().isNotEmpty) {
+                            imageWidget = Image.memory(
+                              base64Decode(item['image_base64'].toString()),
+                              width: 50,
+                              height: 50,
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) {
+                                return const Icon(Icons.error);
+                              },
+                            );
+                          }
+                        } catch (e) {
+                          print('Error decoding image: $e');
+                        }
+
                         return ListTile(
-                          leading: Image.asset(
-                            item.product.imageUrl,
-                            width: 50,
-                            height: 50,
-                            fit: BoxFit.cover,
-                          ),
+                          leading: imageWidget,
                           title: Text(
-                            item.product.name,
+                            productName,
                             textAlign: TextAlign.right,
                           ),
                           subtitle: Text(
-                            'الكمية: ${item.quantity}',
+                            'الكمية: $quantity',
                             textAlign: TextAlign.right,
                           ),
                           trailing: Text(
-                            '${item.product.price * item.quantity} دينار',
+                            '$total دينار',
                             textAlign: TextAlign.right,
                           ),
                         );
-                      },
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  Text(
-                    'الإجمالي: $totalPrice دينار',
-                    textAlign: TextAlign.right,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  const Text(
-                    'سوف يصل الطلب خلال 14 يومًا من عملية الإتمام وسيتم التواصل معك عند الوصول.',
-                    textAlign: TextAlign.right,
-                    style: TextStyle(fontSize: 16, color: Colors.black87),
-                  ),
-                  const SizedBox(height: 16),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF0B5022),
-                        foregroundColor: Colors.white,
+                      }),
+                      const Divider(),
+                      Text(
+                        'الإجمالي: $totalPrice دينار',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                        textAlign: TextAlign.right,
                       ),
-                      onPressed: () {
-                        Navigator.popAndPushNamed(
-                          context,
-                          'shop',
-                        );
-                      },
-                      child: const Text('العودة إلى المتجر'),
-                    ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              );
+            },
+          );
+        },
       ),
     );
   }

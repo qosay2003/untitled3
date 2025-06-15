@@ -566,7 +566,11 @@ class _HomepageState extends State<Homepage> {
                     fontFamily: "IBMPlexSansArabic",
                   ),
                 ),
-                onTap: () {},
+                onTap: () async {
+                  await FirebaseAuth.instance.signOut();
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, "mlogin", (route) => false);
+                },
               ),
             ],
           ),
