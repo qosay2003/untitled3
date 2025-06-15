@@ -16,7 +16,7 @@ class Bissingup extends StatefulWidget {
 class _BissingupState extends State<Bissingup> {
   final Color backgroundColor = Color(0xFF0C552E);
   String? selected_item;
-    String? selectedCity;
+  String? selectedCity;
 
   String? gender;
   File? idImage;
@@ -119,7 +119,7 @@ class _BissingupState extends State<Bissingup> {
         email: email.text,
         password: password.text,
       );
-      userCredential.user!.updateDisplayName(business_name.text);
+      await userCredential.user!.updateDisplayName(business_name.text);
 
       await FirebaseFirestore.instance
           .collection("users")
@@ -128,7 +128,7 @@ class _BissingupState extends State<Bissingup> {
         "id_photo": base64Image,
         "business_name": business_name.text,
         "email": email.text,
-        "city_of_residence": city_of_residence.text,
+        "city_of_residence": selectedCity,
         "gender": gender,
         "business_type": selected_item,
         "user_id": userCredential.user!.uid,
