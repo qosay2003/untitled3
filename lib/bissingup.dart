@@ -134,6 +134,14 @@ class _BissingupState extends State<Bissingup> {
         "user_id": userCredential.user!.uid,
         'role': 'user',
       });
+      await FirebaseFirestore.instance
+          .collection("sports_academies")
+          .doc(userCredential.user!.uid)
+          .set({
+        "type_of_sport": selected_item,
+        "academy_city": selectedCity,
+        "business_name": business_name.text
+      });
       Navigator.pushNamed(context, "homepage");
     } catch (e) {
       print("Error creating account: $e");
@@ -212,7 +220,7 @@ class _BissingupState extends State<Bissingup> {
                               'image': 'img/football.png',
                             },
                             {
-                              'label': 'مسبح',
+                              'label': 'نوادي السباحه',
                               'image': 'img/bool.png',
                             },
                             {

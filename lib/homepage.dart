@@ -112,7 +112,12 @@ class _HomepageState extends State<Homepage> {
         "user_image": base64Image,
         "last_updated": FieldValue.serverTimestamp(),
       });
-
+      await FirebaseFirestore.instance
+          .collection("sports_academies")
+          .doc(userId)
+          .update({
+        "user_image": base64Image,
+      });
       Navigator.of(context).pop();
 
       ScaffoldMessenger.of(context).showSnackBar(
@@ -618,32 +623,15 @@ class _HomepageState extends State<Homepage> {
               .snapshots(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
-            }
-            // Handle errors
-            if (snapshot.hasError) {
-              return Center(
-                child: Text(
-                  'حدث خطأ في تحميل البيانات',
-                  style: TextStyle(
-                    color: Colors.red,
-                    fontFamily: "IBMPlexSansArabic",
-                  ),
-                ),
-              );
+              return SizedBox();
             }
 
-            // Handle empty data
-            if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-              return Center(
-                child: Text(
-                  'لا توجد بيانات متاحة',
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontFamily: "IBMPlexSansArabic",
-                  ),
-                ),
-              );
+            if (snapshot.hasError) {
+              return Text("حدث خطأ");
+            }
+
+            if (!snapshot.hasData) {
+              return SizedBox();
             }
             final data = snapshot.data!.docs;
 
@@ -830,8 +818,8 @@ class _HomepageState extends State<Homepage> {
                         child: ElevatedButton(
                           onPressed: () {
                             Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => PlacesScreen(
-                                    mainTitle: 'أكاديميات السباحة')));
+                                builder: (context) =>
+                                    PlacesScreen(mainTitle: 'نوادي السباحه')));
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Color(0xFFD9D9D9),
@@ -857,8 +845,8 @@ class _HomepageState extends State<Homepage> {
                         child: ElevatedButton(
                           onPressed: () {
                             Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => PlacesScreen(
-                                    mainTitle: 'نوادي كمال الأجسام')));
+                                builder: (context) =>
+                                    PlacesScreen(mainTitle: 'كمال الاجسام')));
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Color(0xFFD9D9D9),
@@ -884,8 +872,8 @@ class _HomepageState extends State<Homepage> {
                         child: ElevatedButton(
                           onPressed: () {
                             Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => PlacesScreen(
-                                    mainTitle: 'أكاديميات الفنون القتالية')));
+                                builder: (context) =>
+                                    PlacesScreen(mainTitle: 'فنون قتاليه')));
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Color(0xFFD9D9D9),
@@ -911,8 +899,8 @@ class _HomepageState extends State<Homepage> {
                         child: ElevatedButton(
                           onPressed: () {
                             Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => PlacesScreen(
-                                    mainTitle: 'أكاديميات كرة القدم')));
+                                builder: (context) =>
+                                    PlacesScreen(mainTitle: 'اكاديمية كره')));
                           },
                           style: ElevatedButton.styleFrom(
                             elevation: 5,

@@ -1,21 +1,23 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:untitled3/TrainersDescriptionScreen.dart';
 import 'package:untitled3/userTrainDes.dart';
 
 class PlacesScreen extends StatefulWidget {
-  final String mainTitle; // معلمة جديدة للعنوان الرئيسي
+  final String mainTitle;
 
-  const PlacesScreen(
-      {super.key, required this.mainTitle}); // طلب المعلمة في المُنشئ
+  const PlacesScreen({super.key, required this.mainTitle});
 
   @override
   _PlacesScreenState createState() => _PlacesScreenState();
 }
 
 class _PlacesScreenState extends State<PlacesScreen> {
-  String selectedFilter = 'الكل'; // الفلتر المختار
+  String selectedFilter = 'الكل'; // Default filter is 'الكل'
 
-  // قائمة الفلاتر مع الصور
   final List<Map<String, String>> filters = [
     {'name': 'الكل', 'image': 'img/greenlogo.png'},
     {'name': 'عمان', 'image': 'img/amman.jpg'},
@@ -32,27 +34,6 @@ class _PlacesScreenState extends State<PlacesScreen> {
     {'name': 'الطفيلة', 'image': 'img/tafilah.jpg'},
   ];
 
-  // قائمة الأماكن (بيانات وهمية) مع إضافة حقل الصورة
-  final List<Map<String, String>> places = [
-    {
-      'name': 'نادي فتنس تايم',
-      'category': 'عمان',
-      'rating': '5',
-      'image': 'img/logo.png'
-    },
-    {
-      'name': 'الأهرامات',
-      'category': 'زرقاء',
-      'rating': '4',
-      'image': 'img/logo.png'
-    },
-    {
-      'name': 'الفيروز',
-      'category': 'عمان',
-      'rating': '5',
-      'image': 'img/logo.png'
-    },
-  ];
   final TextEditingController cityController = TextEditingController();
   final TextEditingController areaController = TextEditingController();
   final TextEditingController allweekdayHoursController =
@@ -63,11 +44,6 @@ class _PlacesScreenState extends State<PlacesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // فلترة الأماكن بناءً على الفلتر المختار
-    List<Map<String, String>> filteredPlaces = selectedFilter == 'الكل'
-        ? places
-        : places.where((place) => place['category'] == selectedFilter).toList();
-
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.white),
@@ -75,7 +51,7 @@ class _PlacesScreenState extends State<PlacesScreen> {
           Padding(
             padding: const EdgeInsets.only(right: 16.0),
             child: Text(
-              widget.mainTitle, // العنوان الرئيسي في الجهة اليمنى
+              widget.mainTitle,
               style: const TextStyle(
                 fontSize: 20,
                 color: Colors.white,
@@ -91,10 +67,7 @@ class _PlacesScreenState extends State<PlacesScreen> {
         textDirection: TextDirection.rtl,
         child: Column(
           children: [
-            SizedBox(
-              height: 30,
-            ),
-            // قائمة الفلاتر الدائرية
+            SizedBox(height: 30),
             Container(
               height: 100,
               child: ListView.builder(
@@ -140,53 +113,81 @@ class _PlacesScreenState extends State<PlacesScreen> {
                 },
               ),
             ),
-            // قائمة الأماكن
             Expanded(
-              child: ListView.builder(
-                itemCount: filteredPlaces.length,
-                itemBuilder: (context, index) {
-                  return Card(
-                    child: ListTile(
-                      onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => GymProfileViewScreen(
-                                cityController: cityController,
-                                areaController: areaController,
-                                allweekdayHoursController:
-                                    allweekdayHoursController,
-                                priceMonthController: priceMonthController,
-                                price3MonthsController: price3MonthsController,
-                                priceYearController: priceYearController,
-                                facilities: [])));
-                      },
-                      leading: null,
-                      title: Row(
-                        children: [
-                          // إضافة الصورة داخل Card
-                          Container(
-                            width: 50,
-                            height: 50,
-                            margin: const EdgeInsets.only(
-                                left: 20), // تعديل المسافة إلى 20
-                            child: Image.asset(
-                              filteredPlaces[index]['image']!,
-                              fit: BoxFit.cover,
-                            ),
+              child: FutureBuilder(
+                future: selectedFilter == 'الكل'
+                    ? FirebaseFirestore.instance
+                        .collection("sports_academies")
+                        .where("type_of_sport", isEqualTo: widget.mainTitle)
+                        .get()
+                    : FirebaseFirestore.instance
+                        .collection("sports_academies")
+                        .where("type_of_sport", isEqualTo: widget.mainTitle)
+                        .where("academy_city", isEqualTo: selectedFilter)
+                        .get(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(child: CircularProgressIndicator());
+                  }
+
+                  if (snapshot.hasError) {
+                    return Center(child: Text("حدث خطأ في جلب البيانات"));
+                  }
+
+                  if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                    return Center(child: Text("لا توجد أندية متاحة"));
+                  }
+
+                  return ListView.builder(
+                    itemCount: snapshot.data!.docs.length,
+                    itemBuilder: (context, index) {
+                      var academy = snapshot.data!.docs[index];
+                      Uint8List? bytes;
+
+                      if (academy.data().containsKey("user_image") &&
+                          academy['user_image'] != null &&
+                          academy['user_image'].toString().isNotEmpty) {
+                        try {
+                          bytes = base64Decode(academy['user_image']);
+                        } catch (e) {
+                          bytes = null;
+                        }
+                      }
+
+                      return Card(
+                        child: ListTile(
+                          onTap: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => GymProfileViewScreen(
+                                    cityController: cityController,
+                                    areaController: areaController,
+                                    allweekdayHoursController:
+                                        allweekdayHoursController,
+                                    priceMonthController: priceMonthController,
+                                    price3MonthsController:
+                                        price3MonthsController,
+                                    priceYearController: priceYearController,
+                                    facilities: [])));
+                          },
+                          leading: null,
+                          title: Row(
+                            children: [
+                              Container(
+                                width: 50,
+                                height: 50,
+                                margin: const EdgeInsets.only(left: 20),
+                                child: bytes == null
+                                    ? Image.asset('img/logo.png',
+                                        fit: BoxFit.cover)
+                                    : Image.memory(bytes, fit: BoxFit.cover),
+                              ),
+                              Text(academy["business_name"]),
+                            ],
                           ),
-                          Text(filteredPlaces[index]['name']!),
-                        ],
-                      ),
-                      subtitle: Text(
-                          '${filteredPlaces[index]['category']} / القاهرة'),
-                      trailing: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: List.generate(
-                          int.parse(filteredPlaces[index]['rating']!),
-                          (i) => const Icon(Icons.star,
-                              color: Colors.grey, size: 20),
+                          subtitle: Text(academy["academy_city"]),
                         ),
-                      ),
-                    ),
+                      );
+                    },
                   );
                 },
               ),
