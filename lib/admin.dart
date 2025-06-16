@@ -135,7 +135,10 @@ class _TrainerCardsState extends State<TrainerCards> {
                             const SizedBox(width: 10),
                             IconButton(
                               icon: const Icon(Icons.delete, color: Colors.red),
-                              onPressed: () => _deleteUserData(userId),
+                              onPressed: () {
+                                 _deleteUserData(userId);
+
+                              },
                             ),
                           ],
                         ),
