@@ -9,6 +9,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:untitled3/ClubsandCoachesPage.dart';
 import 'package:untitled3/Placesscreen.dart';
 import 'package:untitled3/TrainersDescriptionScreen.dart';
+import 'package:untitled3/admin.dart';
 import 'package:untitled3/calcbot.dart';
 import 'package:untitled3/chatuserlist.dart';
 import 'package:untitled3/forgetpass3.dart';
@@ -575,6 +576,26 @@ class _HomepageState extends State<Homepage> {
                   await FirebaseAuth.instance.signOut();
                   Navigator.pushNamedAndRemoveUntil(
                       context, "mlogin", (route) => false);
+                },
+              ),
+              ListTile(
+                trailing: Icon(
+                  Icons.admin_panel_settings,
+                  color: Color(0xFF0B5022),
+                ),
+                title: Text(
+                  'المسؤول',
+                  textAlign: TextAlign.end,
+                  style: TextStyle(
+                    fontFamily: "IBMPlexSansArabic",
+                  ),
+                ),
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => TrainerCards(),
+                    ),
+                  );
                 },
               ),
             ],
