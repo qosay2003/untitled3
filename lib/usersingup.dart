@@ -314,8 +314,6 @@ class Usersingup extends StatelessWidget {
                     child: FaIcon(FontAwesomeIcons.google,
                         color: Colors.white, size: 30),
                   ),
-                  const SizedBox(width: 60),
-                  Icon(Icons.facebook, size: 40, color: Colors.white),
                 ],
               ),
 

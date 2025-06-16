@@ -515,12 +515,32 @@ class _HomepageState extends State<Homepage> {
                   }
 
                   final userData = snapshot.data!;
+                  final isAdmin = userData['role'] == 'admin';
 
                   final businessType =
                       userData.data()!.containsKey("business_type")
                           ? userData.get("business_type")
                           : null;
-
+                  if (isAdmin) {
+                    return ListTile(
+                      trailing: Icon(
+                        Icons.admin_panel_settings,
+                        color: Color(0xFF0B5022),
+                      ),
+                      title: Text(
+                        'لوحة التحكم',
+                        textAlign: TextAlign.end,
+                        style: TextStyle(
+                          fontFamily: "IBMPlexSansArabic",
+                        ),
+                      ),
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute( builder: (context) => TrainerCards())
+                        );
+                      },
+                    );
+                  }
                   if (businessType != null) {
                     return ListTile(
                       trailing: Icon(
@@ -576,26 +596,6 @@ class _HomepageState extends State<Homepage> {
                   await FirebaseAuth.instance.signOut();
                   Navigator.pushNamedAndRemoveUntil(
                       context, "mlogin", (route) => false);
-                },
-              ),
-              ListTile(
-                trailing: Icon(
-                  Icons.admin_panel_settings,
-                  color: Color(0xFF0B5022),
-                ),
-                title: Text(
-                  'المسؤول',
-                  textAlign: TextAlign.end,
-                  style: TextStyle(
-                    fontFamily: "IBMPlexSansArabic",
-                  ),
-                ),
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => TrainerCards(),
-                    ),
-                  );
                 },
               ),
             ],

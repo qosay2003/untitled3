@@ -137,17 +137,42 @@ class _LoginScreenState extends State<mainlogin> {
                         try {
                           await FirebaseAuth.instance
                               .signInWithEmailAndPassword(
-                                  email: email.text, password: password.text);
+                            email: email.text.trim(),
+                            password: password.text.trim(),
+                          );
                           Navigator.pushNamed(context, "homepage");
-                        } on Exception catch (e) {
+                        } on FirebaseAuthException catch (e) {
+                          String errorMessage;
+                          if (e.code == 'user-not-found') {
+                            errorMessage = 'البريد الإلكتروني غير مسجل';
+                          } else if (e.code == 'wrong-password') {
+                            errorMessage = 'كلمة المرور غير صحيحة';
+                          } else if (e.code == 'invalid-email') {
+                            errorMessage = 'البريد الإلكتروني غير صالح';
+                          } else {
+                            errorMessage = 'حدث خطأ أثناء تسجيل الدخول';
+                          }
+
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                                content: Text(
-                              'خطأ: ${e.toString()}',
-                              style: TextStyle(
-                                fontFamily: "IBMPlexSansArabic",
+                              content: Text(
+                                errorMessage,
+                                style:
+                                    TextStyle(fontFamily: "IBMPlexSansArabic"),
                               ),
-                            )),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                        } catch (e) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                'حدث خطأ غير متوقع',
+                                style:
+                                    TextStyle(fontFamily: "IBMPlexSansArabic"),
+                              ),
+                              backgroundColor: Colors.red,
+                            ),
                           );
                         }
                       },
